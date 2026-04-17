@@ -1,0 +1,186 @@
+@domain
+Package Domain {
+    @persistent
+    Class User {
+        @id
+        _id: Long {generation=auto},
+
+        email: String {notnull},
+        username: String {notnull},
+        password: String {notnull},
+    }
+
+    @persistent
+    Class RSSFeed {
+        @id
+        _id: Long {generation=auto},
+
+        // Obrigatórios de RSS
+        url: String {notnull},
+        title: String {notnull},
+        description: String {notnull},
+
+        // Opcionais
+        pub_date: Timestamp {precision=datetime},
+        last_build_date: Timestamp {precision=datetime},
+        image_url: String,
+    }
+
+    @persistent
+    Class RSSItem {
+        @id
+        _id: Long {generation=auto},
+
+        title: String,
+        link: String,
+        description: String,
+
+        enclosure_url: String,
+    }
+
+    @persistent
+    Class Category {
+        @id
+        _id: Long {generation=auto},
+        name: String {notnull},
+    }
+
+    Association {
+        User [1] -- [*] RSSFeed
+        RSSFeed [*] -- [*] Category
+        RSSFeed [1] -- [*] RSSItem
+        RSSItem [*] -- [*] Category
+    }
+}
+
+// @controller
+// Package Control {
+//     Class RegistrationController {
+//         guest: Guest,
+//         age: int,
+
+//         register(): String,
+//     }
+
+//     Dependency {
+//         RegistrationController -> Success
+//         RegistrationController -> Underage
+//     }
+
+//     Association {
+//         RegistrationController -> RegistrationService
+//     }
+// }
+
+// @view
+// Package Navigation {
+//     @page
+//     Class Index {}
+
+//     @form
+//     Class RegForm {
+//         guest__name: inputText,
+//         guest__birthDate: inputText,
+//         guest__email: inputText,
+//         guest__password: inputSecret,
+
+//         register: commandButton,
+//     }
+
+//     @page
+//     Class Success {
+//         guest__name: outputText,
+//     }
+
+//     @page
+//     Class Underage {
+//         guest__name: outputText,
+//         age: outputText,
+//     }
+
+//     Composition {
+//         Index -> RegForm
+//     }
+
+//     Dependency {
+//         RegForm -> RegistrationController
+//     }
+// }
+
+// @service
+// Package Application {
+//     Class RegistrationService {}
+
+//     Class RegistrationServiceBean {
+//         register(): String,
+//         calculateAge(): int,
+//     }
+
+//     Class LoginService {}
+
+//     Class LoginServiceBean {
+//         login(): Guest,
+//     }
+
+//     Class SearchService {}
+
+//     Class SearchServiceBean {
+//         search(): List,
+//     }
+
+//     Dependency {
+//         LoginService -> GuestDAO
+//         SearchService -> BedDAO
+//     }
+
+//     Inheritance {
+//         RegistrationServiceBean extends RegistrationService
+//         LoginServiceBean extends LoginService
+//         SearchServiceBean extends SearchService
+//     }
+// }
+
+@persistence
+Package Persistence {
+    Class UserDAO {
+        get(username, password): User,
+        create(email, username, password): User,
+    }
+
+    Class RSSFeedDAO{
+        create(
+            url,
+            title,
+            description,
+            pub_date,
+            last_build_date,
+            image_url
+        ): RSSFeed,
+        update(
+            _id,
+            url,
+            title,
+            description,
+            pub_date,
+            last_build_date,
+            image_url
+        ): RSSFeed,
+        list_by_user(user): List
+        delete(_id): nil
+    }
+
+    Class RSSItemDAO {
+        create(title, link, description, enclosure_url): RSSItem
+        update(_id, title, link, description, enclosure_url): RSSItem
+        list_by_feed(rss_feed): List
+        delete(_id): nil
+    }
+
+    Class CategoryDAO {
+        create(name): Category,
+        list_by_user(user): List
+        list_by_feed(rss_feed): List
+        list_by_item(rss_item): List
+        delete(_id): nil
+    }
+}
