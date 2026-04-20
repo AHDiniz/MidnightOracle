@@ -55,18 +55,20 @@ Package Domain {
 
 @controller
 Package Control {
-    Class RegistrationController {
+    Class AuthenticationController {
         user: User,
 
         register(): String,
+        login(): String,
     }
 
     Dependency {
-        RegistrationController -> Success
+        AuthenticationController -> RegSuccess
+        AuthenticationController -> RegFailure
     }
 
     Association {
-        RegistrationController -> RegistrationService
+        AuthenticationController -> AuthenticationService
     }
 }
 
@@ -77,43 +79,46 @@ Package Navigation {
 
     @form
     Class RegForm {
-        user__name: inputText,
         user__email: inputText,
+        user__username: inputText,
         user__password: inputSecret,
 
         register: commandButton,
     }
 
     @page
-    Class Success {
-        user__name: outputText,
+    Class RegSuccess {
+        user__username: outputText,
     }
+
+    @page
+    Class RegFailure {}
 
     Composition {
         Index -> RegForm
     }
 
     Dependency {
-        RegForm -> RegistrationController
+        RegForm -> AuthenticationController
     }
 }
 
 @service
 Package Application {
-    Class RegistrationService {
+    Class AuthenticationService {
         register(): String,
-    }
-
-    Class LoginService {
         login(): User,
     }
 
-    Class SearchService {
-        search(): List,
+    Class FeedService {
+        register_feed(): RSSFeed,
+        add_category_to_feed(): Category,
     }
 
     Dependency {
-        LoginService -> UserDAO
+        AuthenticationService -> UserDAO
+        FeedService -> RSSFeedDAO
+        FeedService -> CategoryDAO
     }
 }
 
@@ -124,7 +129,7 @@ Package Persistence {
         create(email, username, password): User,
     }
 
-    Class RSSFeedDAO{
+    Class RSSFeedDAO {
         create(
             url,
             title,
