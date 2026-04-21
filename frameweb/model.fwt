@@ -55,25 +55,33 @@ Package Domain {
 
 @controller
 Package Control {
-    Class AuthenticationController {
+    Class RegController {
         user: User,
 
         register(): String,
-        login(): String,
+    }
+
+    Class LoginController {
+        user: User,
+
+        login(): User,
     }
 
     Dependency {
-        AuthenticationController -> RegSuccess
-        AuthenticationController -> RegFailure
+        RegController -> RegSuccess
+        RegController -> RegFailure
+        LoginController -> Homepage
     }
 
     Association {
-        AuthenticationController -> AuthenticationService
+        RegController -> AuthenticationService
+        LoginController -> AuthenticationService
     }
 }
 
 @view
 Package Navigation {
+    // Página inicial e login
     @page
     Class Index {}
 
@@ -111,8 +119,38 @@ Package Navigation {
     }
 
     Dependency {
-        RegForm -> AuthenticationController
-        LoginForm -> AuthenticationController
+        RegForm -> RegController
+        LoginForm -> LoginController
+    }
+
+    // Já logado
+    @page
+    Class Homepage {
+        user__username: String,
+    }
+
+    @form
+    Class RSSFeedForm {
+        rssfeed__url: String,
+
+        register: commandButton,
+    }
+
+    @form
+    Class RSSItemForm {
+        rssitem__title: String,
+
+        add_category: commandButton,
+    }
+
+    Composition {
+        Homepage -> RSSFeedForm
+        Homepage -> RSSItemForm
+    }
+
+    Dependency {
+        RSSFeedForm -> FeedService
+        RSSItemForm -> FeedService
     }
 }
 
