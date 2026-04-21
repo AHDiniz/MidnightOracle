@@ -86,20 +86,33 @@ Package Navigation {
         register: commandButton,
     }
 
+    @form
+    Class LoginForm {
+        user__username: inputText,
+        user__password: inputSecret,
+
+        login: commandButton,
+    }
+
     @page
     Class RegSuccess {
         user__username: outputText,
     }
 
     @page
-    Class RegFailure {}
+    Class RegFailure {
+        user__email: outputText,
+        user__username: outputText,
+    }
 
     Composition {
         Index -> RegForm
+        Index -> LoginForm
     }
 
     Dependency {
         RegForm -> AuthenticationController
+        LoginForm -> AuthenticationController
     }
 }
 
@@ -112,12 +125,15 @@ Package Application {
 
     Class FeedService {
         register_feed(): RSSFeed,
-        add_category_to_feed(): Category,
+        read_feed(feed): List,
+        add_category_to_feed(feed, category): Category,
+        add_category_to_item(item, category): Category,
     }
 
     Dependency {
         AuthenticationService -> UserDAO
         FeedService -> RSSFeedDAO
+        FeedService -> RSSItemDAO
         FeedService -> CategoryDAO
     }
 }
@@ -148,6 +164,7 @@ Package Persistence {
             image_url
         ): RSSFeed,
         list_by_user(user): List,
+        add_categories(categories): RSSFeed,
         delete(_id): nil,
     }
 
@@ -155,6 +172,7 @@ Package Persistence {
         create(title, link, description, enclosure_url): RSSItem,
         update(_id, title, link, description, enclosure_url): RSSItem,
         list_by_feed(rss_feed): List,
+        add_categories(categories): RSSItem,
         delete(_id): nil,
     }
 
