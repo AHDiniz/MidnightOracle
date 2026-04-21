@@ -11,8 +11,8 @@ server/build
 server/erl_crash.dump
 server/generated/
 
-frameweb/*.aux
-frameweb/*.log
+frameweb/**/*.aux
+frameweb/**/*.log
 
 #Added automatically by Lustre Dev Tools
 /.lustre
