@@ -1,8 +1,18 @@
-*.beam
-*.ez
-/build
-erl_crash.dump
-generated/
+app/.lustre
+app/*.beam
+app/*.ez
+app/build
+app/erl_crash.dump
+app/generated/
+
+server/*.beam
+server/*.ez
+server/build
+server/erl_crash.dump
+server/generated/
+
+frameweb/*.aux
+frameweb/*.log
 
 #Added automatically by Lustre Dev Tools
 /.lustre
