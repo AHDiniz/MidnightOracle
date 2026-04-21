@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.11)  21 APR 2026 11:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.11)  21 APR 2026 11:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1584,6 +1584,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 65--65
 []|\T1/lmr/m/n/10 (+20) Visual Stu-dio
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 66--66
+[]|\T1/lmr/m/n/10 (+20) Mermaid Live
+ []
+
 ) (./capitulos/ch4-arquitetura.tex
 Cap\'{\i }tulo 3.
 [2]
@@ -1628,7 +1633,7 @@ Package rerunfilecheck Info: File `projeto-midnight-oracle.brf' has not changed
 Here is how much of TeX's memory you used:
  35705 strings out of 467525
  640109 string characters out of 5423209
- 1117645 words of memory out of 5000000
+ 1119645 words of memory out of 5000000
  63860 multiletter control sequences out of 15000+600000
  695848 words of font info for 119 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1641,7 +1646,7 @@ e/2026/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/texlive/2026/texmf-dist/
 fonts/type1/public/lm/lmri12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public
 /lm/lmss12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/lm/lmss17.pfb><c:
 /texlive/2026/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb>
-Output written on projeto-midnight-oracle.pdf (6 pages, 653128 bytes).
+Output written on projeto-midnight-oracle.pdf (6 pages, 653274 bytes).
 PDF statistics:
  162 PDF objects out of 1000 (max. 8388607)
  130 compressed objects within 2 object streams
