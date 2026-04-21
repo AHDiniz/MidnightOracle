@@ -4,17 +4,17 @@ app/*.beam
 app/*.ez
 app/build
 app/erl_crash.dump
-app/generated/
 
 server/dist
 server/*.beam
 server/*.ez
 server/build
 server/erl_crash.dump
-server/generated/
 
 frameweb/**/*.aux
 frameweb/**/*.log
+
+generated/
 
 #Added automatically by Lustre Dev Tools
 /.lustre
