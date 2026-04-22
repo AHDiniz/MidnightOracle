@@ -53,34 +53,9 @@ Package Domain {
     }
 }
 
-@controller
-Package Control {
-    Class RegController {
-        user: User,
-
-        register(): String,
-    }
-
-    Class LoginController {
-        user: User,
-
-        login(): User,
-    }
-
-    Dependency {
-        RegController -> RegSuccess
-        RegController -> RegFailure
-        LoginController -> Homepage
-    }
-
-    Association {
-        RegController -> AuthenticationService
-        LoginController -> AuthenticationService
-    }
-}
-
 @view
-Package Navigation {
+Package AuthView
+{
     // Página inicial e login
     @page
     Class IndexPage {}
@@ -126,18 +101,27 @@ Package Navigation {
         RegForm -> RegController
         LoginForm -> LoginController
     }
+}
+
+@view
+Package Navigation {
 
     // Já logado
     @page
     Class Homepage {
         user__username: String,
+        list: List,
     }
 
     @page
-    Class RSSFeedPage {}
+    Class RSSFeedPage {
+        list: List,
+    }
 
     @page
-    Class RSSItemPage {}
+    Class RSSItemPage {
+        item: RSSItem,
+    }
 
     @form
     Class RegisterFeedForm {
@@ -168,12 +152,48 @@ Package Navigation {
     }
 
     Dependency {
-        CategorizeFeedForm -> FeedService
-        RegisterFeedForm -> FeedService
-        RSSItemForm -> FeedService
+        CategorizeFeedForm -> FeedController
+        RegisterFeedForm -> FeedController
+        RSSItemForm -> FeedController
 
         Homepage -> RSSFeedPage
         RSSFeedPage -> RSSItemPage
+    }
+}
+
+@controller
+Package Control {
+    Class RegController {
+        user: User,
+
+        register(): String,
+    }
+
+    Class LoginController {
+        user: User,
+
+        login(): User,
+    }
+
+    Class FeedController
+    {
+        feed: RSSFeed,
+
+        list(): List,
+        create(): RSSFeed,
+        add_category(): Nil,
+    }
+
+    Dependency {
+        RegController -> RegSuccess
+        RegController -> RegFailure
+        LoginController -> Homepage
+    }
+
+    Association {
+        RegController -> AuthenticationService
+        LoginController -> AuthenticationService
+        FeedController -> FeedService
     }
 }
 
@@ -226,7 +246,7 @@ Package Persistence {
         ): RSSFeed,
         list_by_user(user): List,
         add_categories(categories): RSSFeed,
-        delete(_id): nil,
+        delete(_id): Nil,
     }
 
     Class RSSItemDAO {
@@ -234,7 +254,7 @@ Package Persistence {
         update(_id, title, link, description, enclosure_url): RSSItem,
         list_by_feed(rss_feed): List,
         add_categories(categories): RSSItem,
-        delete(_id): nil,
+        delete(_id): Nil,
     }
 
     Class CategoryDAO {
@@ -242,6 +262,6 @@ Package Persistence {
         list_by_user(user): List,
         list_by_feed(rss_feed): List,
         list_by_item(rss_item): List,
-        delete(_id): nil,
+        delete(_id): Nil,
     }
 }
