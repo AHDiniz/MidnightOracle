@@ -83,7 +83,10 @@ Package Control {
 Package Navigation {
     // Página inicial e login
     @page
-    Class Index {}
+    Class IndexPage {}
+
+    @page
+    Class RegistrationPage {}
 
     @form
     Class RegForm {
@@ -114,11 +117,12 @@ Package Navigation {
     }
 
     Composition {
-        Index -> RegForm
-        Index -> LoginForm
+        RegistrationPage -> RegForm
+        IndexPage -> LoginForm
     }
 
     Dependency {
+        IndexPage -> RegistrationPage
         RegForm -> RegController
         LoginForm -> LoginController
     }
@@ -129,11 +133,25 @@ Package Navigation {
         user__username: String,
     }
 
+    @page
+    Class RSSFeedPage {}
+
+    @page
+    Class RSSItemPage {}
+
     @form
-    Class RSSFeedForm {
+    Class RegisterFeedForm {
         rssfeed__url: String,
 
         register: commandButton,
+    }
+
+    @form
+    Class CategorizeFeedForm {
+        rssfeed__id: Int,
+        categorey: String,
+
+        add_category: commandButton,
     }
 
     @form
@@ -144,13 +162,18 @@ Package Navigation {
     }
 
     Composition {
-        Homepage -> RSSFeedForm
-        Homepage -> RSSItemForm
+        Homepage -> RegisterFeedForm
+        RSSFeedPage -> CategorizeFeedForm
+        RSSItemPage -> RSSItemForm
     }
 
     Dependency {
-        RSSFeedForm -> FeedService
+        CategorizeFeedForm -> FeedService
+        RegisterFeedForm -> FeedService
         RSSItemForm -> FeedService
+
+        Homepage -> RSSFeedPage
+        RSSFeedPage -> RSSItemPage
     }
 }
 
