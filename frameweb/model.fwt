@@ -168,7 +168,7 @@ Package Control {
     Class RegController {
         user: User,
 
-        register(): String,
+        register(): Bool,
     }
 
     Class LoginController {
@@ -202,19 +202,19 @@ Package Control {
 @service
 Package Application {
     Class AuthenticationService {
-        register(): String,
+        register(): Bool,
         login(): User,
     }
 
     Class FeedService {
         register_feed(): RSSFeed,
         read_feed(feed): List,
-        add_category_to_feed(feed, category): Category,
+        add_category_to_feed(feed, category): Nil,
     }
 
     Class ItemService {
         save_item(item): RSSItem,
-        add_category_to_item(item, category): Category,
+        add_category_to_item(item, category): Nil,
     }
 
     Dependency {
