@@ -1,5 +1,5 @@
 @domain
-Package Domain {
+Package Datatypes {
     @persistent
     Class User {
         @id
@@ -54,8 +54,7 @@ Package Domain {
 }
 
 @view
-Package AuthView
-{
+Package AuthView {
     // Página inicial e login
     @page
     Class IndexPage {}
@@ -97,15 +96,17 @@ Package AuthView
     }
 
     Dependency {
+        // Links entre páginas
         IndexPage -> RegistrationPage
+
+        // Usos de Controllers
         RegForm -> RegController
         LoginForm -> LoginController
     }
 }
 
 @view
-Package Navigation {
-
+Package UserView {
     // Já logado
     @page
     Class Homepage {
@@ -115,6 +116,7 @@ Package Navigation {
 
     @page
     Class RSSFeedPage {
+        rss_feed: RSSFeed,
         list: List,
     }
 
@@ -133,7 +135,7 @@ Package Navigation {
     @form
     Class CategorizeFeedForm {
         rssfeed__id: Int,
-        categorey: String,
+        category: String,
 
         add_category: commandButton,
     }
@@ -175,8 +177,7 @@ Package Control {
         login(): User,
     }
 
-    Class FeedController
-    {
+    Class FeedController {
         feed: RSSFeed,
 
         list(): List,
@@ -194,6 +195,7 @@ Package Control {
         RegController -> AuthenticationService
         LoginController -> AuthenticationService
         FeedController -> FeedService
+        FeedController -> ItemService
     }
 }
 
@@ -208,14 +210,22 @@ Package Application {
         register_feed(): RSSFeed,
         read_feed(feed): List,
         add_category_to_feed(feed, category): Category,
+    }
+
+    Class ItemService {
+        save_item(item): RSSItem,
         add_category_to_item(item, category): Category,
     }
 
     Dependency {
         AuthenticationService -> UserDAO
+
         FeedService -> RSSFeedDAO
         FeedService -> RSSItemDAO
         FeedService -> CategoryDAO
+
+        ItemService -> RSSItemDAO
+        ItemService -> CategoryDAO
     }
 }
 
