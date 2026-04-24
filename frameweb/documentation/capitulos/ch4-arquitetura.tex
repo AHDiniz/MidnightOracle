@@ -18,4 +18,4 @@ Podemos ver que a aplicação é divida em cinco pacotes: um para a definição 
 
 A ideia é que os pacotes \textit{Application} e \textit{Persistance} serão viveram no \textit{back-end}, enquanto os pacotes \textit{Control}, \textit{UserView} e \textit{AuthView} viveram no \textit{front-end}. Enquanto isso, o pacote \textit{Datatypes} será referenciado pelas duas pontas da aplicação, já que representa os dados necessários para a execução da lógica de domínio.
 
-A ideia é que um usuário pode realizar o cadastro na aplicação, o que o permite que ele possa salvar 
+A ideia é que um usuário pode realizar o cadastro na aplicação, o que o permite que ele possa salvar links de feeds RSS na sua conta, e também possa editar as categorias às quais tanto os feeds quanto os itens dos feeds pertencem, por isso estamos salvando esses dados no banco. Isso também permite que, numa suposta versão futura da aplicação, seja possível mostrar o conteúdo de um item do feed dentro de sua página.
