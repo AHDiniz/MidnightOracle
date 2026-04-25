@@ -39,11 +39,14 @@ A Tabela~\ref{tabela-frameworks} indica os \textit{frameworks} presentes na arqu
 \section{Camada de Negócio}
 \label{sec-frameweb-negocio}
 
-Na camada de negócio, vivem as classes do pacote \textit{Datatypes}, que representam um usuário, que possui nome, email e senha, que pode estar associado a um ou mais feeds RSS, que possuem URL, título, descrição, a data inicial de publicação, a data da última postagem, e um link para uma imagem do feed.
+Na camada de negócio, vivem as classes do pacote \textit{Datatypes}, que representam:
+\begin{itemize}
+	\item um \textbf{Usuário}, que possui nome, email e senha. Cada usuário está também associado a múltiplos
+	\item \textbf{Feeds RSS}, que possuem URL, título, descrição, a data inicial de publicação, a data da última postagem, e um link para uma imagem do feed. Esses Feeds são compostos de múltiplos
+	\item \textbf{Itens}, onde um item representa um post do feed, possuindo um título, um link para o post, uma descrição e um link para alguma mídia que esteja ligada ao item, como por exemplo, o arquivo de áudio de um episódio de podcast
+	\item E por fim, tanto os feeds quanto os itens terão \textbf{Categorias}, que são representadas apenas por nome, e podem ser extraídas tanto do arquivo do feed RSS, quanto serem criadas manualmente pelo usuário, para que ele possa organizar, filtrar e pesquisar seus feeds.
 
-Cada feed pode estar associado a um ou mais itens, que representam cada post do feed, e possuem um título, um link para o post, uma descrição e um link para alguma mídia que esteja ligada ao item, que pode ser, por exemplo, o arquivo de áudio de um episódio de podcast.
-
-Tanto o feed quanto o item podem ter uma ou mais categorias, que possuem o nome dessa categoria, e podem ser extraídas tanto do arquivo do feed RSS quanto ser criadas pelo próprio usuário para que ele possa organizar, filtrar e pesquisar seus feeds.
+E também, ainda na Camada de Negócio, temos o pacote \textit{Application}, que irá ditar toda a lógica de negócio necessária para o sistema, e irá expor para o \textit{front-end} apenas comandos e operações expecíficos.
 
 \section{Camada de Acesso a Dados}
 \label{sec-frameweb-dados}
@@ -53,4 +56,4 @@ Na camada \textit{Persistence}, vivem as classes do tipo Data Access Object, um 
 \section{Camada de Apresentação}
 \label{sec-frameweb-apresentacao}
 
-Os pacotes restantes lidam com a navegação do \textit{front-end}, ou da comunicação entre o \textit{front-end} com o \textit{back-end}. Existe um pacote para lidar com as páginas de \textit{login} e registro de usuário, e outro para lidar com as páginas para quando o usuário já está logado. Enquanto isso, os pacotes \textit{Control} e \textit{Application} lidam com a comunicação entre as duas pontas, onde o primeiro vive no \textit{front-end} e o segundo \textit{back-end}.
+Os pacotes restantes lidam com a navegação do \textit{front-end}. Existem dois pacotes de Navegação: um pacote para lidar com as páginas de \textit{login} e registro de usuário; e outro para lidar com as páginas para quando o usuário já está logado. Por fim, o pacote \textit{Control} é o responsável por coletar dados do \textit{back-end} para que sejam mostrados em tela, e por enviar para o \textit{back-end} os dados fornecidos pelo usuário.
