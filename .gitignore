@@ -1,3 +1,5 @@
+**/.env
+
 app/.lustre
 app/dist
 app/*.beam
@@ -18,8 +20,9 @@ frameweb/**/*.brf
 frameweb/**/*.idx
 frameweb/**/*.synctex.gz
 
+# Frameweb Writer Tool
 generated/
 
-#Added automatically by Lustre Dev Tools
+# Added automatically by Lustre Dev Tools
 /.lustre
 /dist
