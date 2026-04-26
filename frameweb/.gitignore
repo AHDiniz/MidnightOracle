@@ -1,0 +1,6 @@
+**/*.aux
+**/*.log
+**/*.bbl
+**/*.brf
+**/*.idx
+**/*.synctex.gz

@@ -1,28 +1,2 @@
-**/.env
-
-app/.lustre
-app/dist
-app/*.beam
-app/*.ez
-app/build
-app/erl_crash.dump
-
-server/dist
-server/*.beam
-server/*.ez
-server/build
-server/erl_crash.dump
-
-frameweb/**/*.aux
-frameweb/**/*.log
-frameweb/**/*.bbl
-frameweb/**/*.brf
-frameweb/**/*.idx
-frameweb/**/*.synctex.gz
-
 # Frameweb Writer Tool
 generated/
-
-# Added automatically by Lustre Dev Tools
-/.lustre
-/dist
