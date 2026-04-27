@@ -1,3 +1,8 @@
+name: midnight_oracle
+
+include:
+  - server/docker-compose.yml
+
 services:
   gleam:
     image: miebach/gleam-docker:gleam1.9.1-elixir1.18.3-erlang27

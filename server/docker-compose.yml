@@ -1,4 +1,4 @@
-name: midnight_oracle
+name: midnight_oracle_backend
 
 services:
    db:
