@@ -1,0 +1,8 @@
+name: midnight_oracle_frontend
+
+services:
+  webapp:
+    build: .
+    container_name: gleam_webapp
+    ports:
+      - "8888:1234"

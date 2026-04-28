@@ -1,7 +1,7 @@
 name: midnight_oracle_backend
 
 services:
-   db:
+  db:
     image: postgres:17
     container_name: postgres
     ports:

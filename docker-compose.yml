@@ -1,6 +1,7 @@
 name: midnight_oracle
 
 include:
+  - app/docker-compose.yml
   - server/docker-compose.yml
 
 services:
