@@ -4,8 +4,8 @@ services:
   db:
     image: postgres:17
     container_name: postgres
-    ports:
-      - "5432:5432"
+    #    ports:
+    #      - "5432:5432"
     # Se a gente quiser a opção de deletar o container sem perder os dados
     # volumes:
     #   - postgres_devweb:/var/lib/postgresql/data

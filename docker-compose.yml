@@ -3,17 +3,3 @@ name: midnight_oracle
 include:
   - app/docker-compose.yml
   - server/docker-compose.yml
-
-services:
-  gleam:
-    image: miebach/gleam-docker:gleam1.9.1-elixir1.18.3-erlang27
-    #image: miebach/gleam-docker:gleam1.2.1-elixir1.13.3-erlang24
-    ports:
-      - "8180:8080"
-      - "8100:8000"
-    volumes:
-      - ./app:/app
-      - ./data:/data
-      - ~/journal:/journal
-      - ./.ssh/:/root/.ssh
-    command: tail -f /dev/null
