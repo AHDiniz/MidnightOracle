@@ -17,10 +17,23 @@ services:
       context: .
       dockerfile: Dockerfile.squirrel
     profiles:
-      - squirrel
+      - gen
     env_file:
       - .env
+    depends_on:
+      - db
     volumes:
       - type: bind
         source: ./src/
         target: /server/src
+
+  cigogne:
+    build:
+      context: .
+      dockerfile: Dockerfile.cigogne
+    profiles:
+      - migrate
+    env_file:
+      - .env
+    depends_on:
+      - db
