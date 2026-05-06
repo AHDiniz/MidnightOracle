@@ -8,4 +8,4 @@ RUN gleam deps download && gleam build
 COPY priv/ ./priv/
 COPY src/ ./src/
 
-CMD [ "gleam", "run", "-m", "cigogne", "all" ]
+ENTRYPOINT [ "gleam", "run" ]
