@@ -2,13 +2,16 @@ import lustre
 import lustre/effect
 import lustre/element.{text}
 import lustre/element/html as html
+import messages
 
 fn init() {
   #(Nil, effect.none())
 }
 
 fn update(model, message) {
-  #(Nil, effect.none())
+  case message {
+    Message(username, password) -> #(Nil, effect.none())
+  }
 }
 
 fn view(model) {
