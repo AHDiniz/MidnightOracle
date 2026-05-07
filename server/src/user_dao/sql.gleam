@@ -7,6 +7,29 @@
 import gleam/dynamic/decode
 import pog
 
+/// Runs the `create_user` query
+/// defined in `./src/user_dao/sql/create_user.sql`.
+///
+/// > 🐿️ This function was generated automatically using v4.6.0 of
+/// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
+///
+pub fn create_user(
+  db: pog.Connection,
+  arg_1: String,
+  arg_2: String,
+) -> Result(pog.Returned(Nil), pog.QueryError) {
+  let decoder = decode.map(decode.dynamic, fn(_) { Nil })
+
+  "INSERT INTO users (username, password)
+VALUES ($1, $2)
+"
+  |> pog.query
+  |> pog.parameter(pog.text(arg_1))
+  |> pog.parameter(pog.text(arg_2))
+  |> pog.returning(decoder)
+  |> pog.execute(db)
+}
+
 /// A row you get from running the `get_user_by_username` query
 /// defined in `./src/user_dao/sql/get_user_by_username.sql`.
 ///
