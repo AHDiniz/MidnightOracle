@@ -54,5 +54,6 @@ cigogne = { version = ">= 5.0.6 and < 6.0.0" }
 gleam_stdlib = { version = ">= 0.44.0 and < 2.0.0" }
 gleeunit = { version = ">= 1.0.0 and < 2.0.0" }
 glow_auth = { version = ">= 1.0.1 and < 2.0.0" }
+pog = { version = ">= 4.1.0 and < 5.0.0" }
 squirrel = { version = ">= 4.6.0 and < 5.0.0" }
 wisp = { version = ">= 2.2.2 and < 3.0.0" }
