@@ -1,5 +1,5 @@
 SELECT
-  username, password
+  username, email, password
 FROM
   users
 where

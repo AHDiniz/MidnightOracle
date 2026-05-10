@@ -18,8 +18,6 @@ services:
       - gen
     env_file:
       - .env
-    depends_on:
-      - db
     volumes:
       - type: bind
         source: ./src/
@@ -32,6 +30,4 @@ services:
       - migrate
     env_file:
       - .env
-    depends_on:
-      - db
     command: [ "-m", "cigogne", "all" ]
