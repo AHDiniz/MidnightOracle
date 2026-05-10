@@ -19,5 +19,5 @@ pub fn get_user_by_username(username: String) -> User {
 
   let assert [row] = rows.rows
 
-  User(username: row.username, password: row.password, email: "")
+  User(username: row.username, email: row.email, password: row.password)
 }
