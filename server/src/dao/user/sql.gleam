@@ -1,5 +1,5 @@
 //// This module contains the code to run the sql queries defined in
-//// `./src/user_dao/sql`.
+//// `./src/dao/user/sql`.
 //// > 🐿️ This module was generated automatically using v4.6.0 of
 //// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ////
@@ -8,7 +8,7 @@ import gleam/dynamic/decode
 import pog
 
 /// Runs the `create_user` query
-/// defined in `./src/user_dao/sql/create_user.sql`.
+/// defined in `./src/dao/user/sql/create_user.sql`.
 ///
 /// > 🐿️ This function was generated automatically using v4.6.0 of
 /// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
@@ -33,7 +33,7 @@ VALUES ($1, $2, $3)
 }
 
 /// A row you get from running the `get_user_by_username` query
-/// defined in `./src/user_dao/sql/get_user_by_username.sql`.
+/// defined in `./src/dao/user/sql/get_user_by_username.sql`.
 ///
 /// > 🐿️ This type definition was generated automatically using v4.6.0 of the
 /// > [squirrel package](https://github.com/giacomocavalieri/squirrel).
@@ -43,7 +43,7 @@ pub type GetUserByUsernameRow {
 }
 
 /// Runs the `get_user_by_username` query
-/// defined in `./src/user_dao/sql/get_user_by_username.sql`.
+/// defined in `./src/dao/user/sql/get_user_by_username.sql`.
 ///
 /// > 🐿️ This function was generated automatically using v4.6.0 of
 /// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
