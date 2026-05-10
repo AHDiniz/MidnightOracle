@@ -1,4 +1,3 @@
-// import errors.{type DatabaseError, EmptyGetError, MultipleGetError, QueryError}
 import dao/base as base_dao
 import gleam/option.{type Option}
 import midnight_domain.{type User, User}
