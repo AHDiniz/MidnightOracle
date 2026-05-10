@@ -1,4 +1,4 @@
-FROM ghcr.io/gleam-lang/gleam:v1.16.0-erlang
+FROM midnight_domain
 
 WORKDIR /server
 

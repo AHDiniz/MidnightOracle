@@ -1,20 +1,22 @@
 # server
 
-[![Package Version](https://img.shields.io/hexpm/v/server)](https://hex.pm/packages/server)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/server/)
+## Deployment
+
+### Rodar migrations no BD
 
 ```sh
-gleam add server@1
-```
-```gleam
-import server
-
-pub fn main() -> Nil {
-  // TODO: An example of the project in use
-}
+docker compose up cigogne # Precisa ter o arquivo .env preenchido
+# ou
+gleam run -m cigogne all # Precisa ter as envvars settadas
 ```
 
-Further documentation can be found at <https://hexdocs.pm/server>.
+### Gerar funções do Squirrel
+
+```sh
+docker compose up squirrel # Precisa ter o arquivo .env preenchido
+# ou
+gleam run -m squirrel # Precisa ter as envvars settadas
+```
 
 ## Development
 

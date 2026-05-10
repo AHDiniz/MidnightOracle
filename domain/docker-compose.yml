@@ -1,0 +1,6 @@
+name: midnight_oracle
+
+services:
+  domain:
+    image: midnight_domain
+    build: .

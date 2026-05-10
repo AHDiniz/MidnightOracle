@@ -1,5 +1,8 @@
 name: midnight_oracle_backend
 
+include:
+  - ../domain/docker-compose.yml
+
 services:
   db:
     image: postgres:17
