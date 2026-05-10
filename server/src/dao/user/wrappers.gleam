@@ -3,14 +3,18 @@ import dao/base as base_dao
 import gleam/option.{type Option}
 import midnight_domain.{type User, User}
 import user_dao/sql
-import utils
 
 pub fn get_user_by_username(
   username: String,
 ) -> Result(Option(User), base_dao.DAOError) {
-  utils.get_pog_connection()
-  |> sql.get_user_by_username(username)
-  |> base_dao.handle_get_result(fn(row) {
-    User(row.username, row.email, row.password)
+  base_dao.generic_get(
+    fn(conn) { sql.get_user_by_username(conn, username) },
+    fn(row) { User(row.username, row.email, row.password) },
+  )
+}
+
+pub fn create_user(user: User) -> Result(Nil, base_dao.DAOError) {
+  base_dao.generic_create(fn(conn) {
+    sql.create_user(conn, user.username, user.email, user.password)
   })
 }
