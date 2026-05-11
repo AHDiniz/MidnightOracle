@@ -1,7 +1,7 @@
 import dao/base as base_dao
+import dao/user/sql
 import gleam/option.{type Option}
 import midnight_domain.{type User, User}
-import user_dao/sql
 
 pub fn get_user_by_username(
   username: String,
