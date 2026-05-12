@@ -20,7 +20,7 @@ pub fn main() {
     wisp_mist.handler(router.handle_request, secret_key_base)
     |> mist.new
     |> mist.bind("0.0.0.0")
-    |> mist.port(8000)
+    |> mist.port(8910)
     |> mist.start
 
   // The web server runs in new Erlang process, so put this one to sleep while

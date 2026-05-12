@@ -18,7 +18,7 @@ services:
   server:
     build: .
     ports:
-      - "8910:8000"
+      - "8910:8910"
     env_file:
       - .env
 
