@@ -1,11 +1,11 @@
-FROM ghcr.io/gleam-lang/gleam:v1.16.0-erlang
+FROM midnight_domain
 
 WORKDIR /app
 
 COPY gleam.toml manifest.toml ./
-COPY src/ ./src/
+RUN gleam deps download
 
-RUN gleam deps download \
-    && gleam build
+COPY src/ ./src/
+RUN gleam build
 
 CMD [ "gleam", "run", "-m", "lustre/dev", "start", "--host=0.0.0.0" ]

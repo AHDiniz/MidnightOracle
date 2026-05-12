@@ -1,4 +1,4 @@
-name: midnight_oracle_frontend
+name: midnight_oracle
 
 include:
   - ../domain/docker-compose.yml
