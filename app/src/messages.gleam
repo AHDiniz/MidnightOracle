@@ -1,3 +1,12 @@
+import midnight_domain/user.{type User}
+
+pub type Model {
+  Model(user: User)
+}
+
 pub type Message {
-  UserLogin(username: String, password: String),
+  SetUserName(username: String)
+  SetUserEmail(email: String)
+  SetPassword(password: String)
+  UserLogin
 }
