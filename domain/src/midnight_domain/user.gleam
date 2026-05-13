@@ -9,7 +9,6 @@ pub fn encoder(user: User) -> json.Json {
   json.object([
     #("username", json.string(user.username)),
     #("email", json.string(user.email)),
-    #("password", json.string(user.password)),
   ])
 }
 

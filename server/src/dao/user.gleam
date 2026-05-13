@@ -8,12 +8,16 @@ pub fn get_user_by_username(
 ) -> Result(Option(User), base_dao.DAOError) {
   base_dao.generic_get(
     fn(conn) { sql.get_user_by_username(conn, username) },
-    fn(row) { User(row.username, row.email, row.password) },
+    fn(row) { User(row.username, row.email, "<REDACTED>") },
   )
 }
 
-pub fn create_user(user: User) -> Result(Nil, base_dao.DAOError) {
+/// `password` é passado por fora para que ele já venha encriptado
+pub fn create_user(
+  user: User,
+  password: BitArray,
+) -> Result(Nil, base_dao.DAOError) {
   base_dao.generic_create(fn(conn) {
-    sql.create_user(conn, user.username, user.email, user.password)
+    sql.create_user(conn, user.username, user.email, password)
   })
 }
