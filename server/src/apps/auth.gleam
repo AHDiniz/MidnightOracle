@@ -1,28 +1,24 @@
-import apps/auth/utils
+import apps/auth/errors
+import apps/auth/service
+import apps/utils
 import gleam/dynamic/decode
 import gleam/http
 import gleam/result
 import midnight_domain/user
 import wisp.{type Request, type Response}
 
-pub type AuthErrors {
-  InternalError
-  BadBody
-}
-
 fn register(req: Request) -> Response {
   use <- wisp.require_method(req, http.Post)
-  use body <- wisp.require_json(req)
+  use decoded <- utils.decode_json_body(req, user.decoder())
 
-  let result = {
-    use user <- result.map(decode.run(body, user.decoder()))
-    utils.persist_user(user)
+  let res = {
+    use user <- result.try(decoded)
+    service.persist_user(user)
   }
 
-  case result {
-    Ok(Ok(_)) -> wisp.json_response("{}", 201)
-    Ok(Error(_)) -> utils.error_json_response("Erro interno", 500)
-    Error(_) -> utils.error_json_response("Body inválido", 400)
+  case res {
+    Ok(_) -> wisp.json_response("{}", 201)
+    Error(err) -> errors.error_response(err)
   }
 }
 
@@ -34,19 +30,16 @@ fn login(req: Request) -> Response {
   }
 
   use <- wisp.require_method(req, http.Post)
-  use body <- wisp.require_json(req)
+  use decoded <- utils.decode_json_body(req, body_decoder)
 
   let validate_result = {
-    use #(username, password) <- result.map(decode.run(body, body_decoder))
-    utils.validate_user(username, password)
+    use #(username, password) <- result.try(decoded)
+    service.validate_user(username, password)
   }
 
   case validate_result {
-    Ok(Ok(True)) -> wisp.accepted()
-    Ok(Ok(False)) ->
-      utils.error_json_response("Usuário ou senha incorretos", 400)
-    Ok(Error(msg)) -> utils.error_json_response(msg, 500)
-    Error(_) -> utils.error_json_response("Body inválido", 400)
+    Ok(_) -> wisp.accepted()
+    Error(x) -> errors.error_response(x)
   }
 }
 
