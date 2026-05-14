@@ -1,7 +1,7 @@
 //// Ref: https://github.com/gleam-wisp/wisp/blob/main/examples/src/routing/app/router.gleam
 
+import apps/auth
 import server/middleware
-import service/auth
 import wisp.{type Request, type Response}
 
 /// The HTTP request handler- your application!

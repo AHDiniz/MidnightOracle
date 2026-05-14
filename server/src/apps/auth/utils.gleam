@@ -35,7 +35,7 @@ pub fn validate_user(
 pub fn persist_user(user: User) {
   let hashed_password = hash_password(user.password)
   let new_user =
-    user_dao.EncryptedPasswordUser(user.username, user.email, hashed_password)
+    user_dao.InternalUser(user.username, user.email, hashed_password)
   user_dao.create_user(new_user)
 }
 

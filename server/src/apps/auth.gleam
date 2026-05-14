@@ -1,9 +1,14 @@
+import apps/auth/utils
 import gleam/dynamic/decode
 import gleam/http
 import gleam/result
 import midnight_domain/user
-import service/utils
 import wisp.{type Request, type Response}
+
+pub type AuthErrors {
+  InternalError
+  BadBody
+}
 
 fn register(req: Request) -> Response {
   use <- wisp.require_method(req, http.Post)
