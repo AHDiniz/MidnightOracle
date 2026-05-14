@@ -3,7 +3,7 @@ import dao/user/sql
 import gleam/option.{type Option}
 
 pub type InternalUser {
-  InternalUser(username: String, email: String, password: BitArray)
+  InternalUser(id: Int, username: String, email: String, password: BitArray)
 }
 
 pub fn get_user_by_username(
@@ -11,7 +11,7 @@ pub fn get_user_by_username(
 ) -> Result(Option(InternalUser), base_dao.DAOError) {
   base_dao.generic_get(
     fn(conn) { sql.get_user_by_username(conn, username) },
-    fn(row) { InternalUser(row.username, row.email, row.password) },
+    fn(row) { InternalUser(row.id, row.username, row.email, row.password) },
   )
 }
 

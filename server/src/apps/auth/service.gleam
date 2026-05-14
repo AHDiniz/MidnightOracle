@@ -40,7 +40,7 @@ pub fn validate_user(username: String, password: String) -> AuthResult(Nil) {
 /// Salva um User no banco de dados, com sua senha devidamente hasheada
 pub fn persist_user(user: User) -> AuthResult(Nil) {
   hash_password(user.password)
-  |> user_dao.InternalUser(user.username, user.email, _)
+  |> user_dao.InternalUser(-1, user.username, user.email, _)
   |> user_dao.create_user()
   |> errors.to_internal_error()
 }

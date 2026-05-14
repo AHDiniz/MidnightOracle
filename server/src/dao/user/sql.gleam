@@ -39,7 +39,12 @@ VALUES ($1, $2, $3)
 /// > [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub type GetUserByUsernameRow {
-  GetUserByUsernameRow(username: String, email: String, password: BitArray)
+  GetUserByUsernameRow(
+    id: Int,
+    username: String,
+    email: String,
+    password: BitArray,
+  )
 }
 
 /// Runs the `get_user_by_username` query
@@ -53,14 +58,15 @@ pub fn get_user_by_username(
   arg_1: String,
 ) -> Result(pog.Returned(GetUserByUsernameRow), pog.QueryError) {
   let decoder = {
-    use username <- decode.field(0, decode.string)
-    use email <- decode.field(1, decode.string)
-    use password <- decode.field(2, decode.bit_array)
-    decode.success(GetUserByUsernameRow(username:, email:, password:))
+    use id <- decode.field(0, decode.int)
+    use username <- decode.field(1, decode.string)
+    use email <- decode.field(2, decode.string)
+    use password <- decode.field(3, decode.bit_array)
+    decode.success(GetUserByUsernameRow(id:, username:, email:, password:))
   }
 
   "SELECT
-  username, email, password
+  id, username, email, password
 FROM
   users
 where
