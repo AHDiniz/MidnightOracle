@@ -8,20 +8,40 @@ import messages as msg
 import midnight_domain/user.{User}
 
 fn init(model: msg.Model) {
-  let user = User(username: "", email: "", password: "")
-  #(msg.Model(user), effect.none())
+  #(model, effect.none())
 }
 
 fn update(model: msg.Model, message: msg.Message) {
   case message {
     msg.SetUserName(username) -> {
-      #(model, effect.none())
+      let next_user =
+        User(
+          username: username,
+          email: model.user.email,
+          password: model.user.password,
+        )
+      let next_model = msg.Model(next_user)
+      #(next_model, effect.none())
     }
     msg.SetUserEmail(email) -> {
-      #(model, effect.none())
+      let next_user =
+        User(
+          username: model.user.username,
+          email: email,
+          password: model.user.password,
+        )
+      let next_model = msg.Model(next_user)
+      #(next_model, effect.none())
     }
     msg.SetPassword(password) -> {
-      #(model, effect.none())
+      let next_user =
+        User(
+          username: model.user.username,
+          email: model.user.email,
+          password: password,
+        )
+      let next_model = msg.Model(next_user)
+      #(next_model, effect.none())
     }
     msg.UserLogin -> {
       #(model, effect.none())
@@ -47,7 +67,9 @@ fn view(model: msg.Model) {
 
 pub fn main() {
   let app = lustre.application(init, update, view)
-  let assert Ok(_) = lustre.start(app, "div", Nil)
+  let user = User(username: "", email: "", password: "")
+  let model = msg.Model(user: user)
+  let assert Ok(_) = lustre.start(app, "div", model)
 
   Nil
 }
