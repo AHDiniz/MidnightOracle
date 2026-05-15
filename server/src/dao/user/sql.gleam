@@ -67,10 +67,8 @@ pub fn get_user_by_username(
 
   "SELECT
   id, username, email, password
-FROM
-  users
-where
-  username=$1
+FROM users
+WHERE username=$1
 "
   |> pog.query
   |> pog.parameter(pog.text(arg_1))

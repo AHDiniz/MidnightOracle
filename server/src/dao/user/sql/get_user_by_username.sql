@@ -1,6 +1,4 @@
 SELECT
   id, username, email, password
-FROM
-  users
-where
-  username=$1
+FROM users
+WHERE username=$1

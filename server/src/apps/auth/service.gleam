@@ -32,7 +32,6 @@ pub fn validate_user(username: String, password: String) -> AuthResult(Nil) {
 
   case crypto.secure_compare(hashed_password, user.password) {
     True -> Ok(Nil)
-    // crypto.strong_random_bytes(64)
     False -> Error(errors.WrongPass)
   }
 }
