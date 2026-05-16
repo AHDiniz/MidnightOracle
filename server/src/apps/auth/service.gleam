@@ -2,7 +2,6 @@ import apps/auth/errors.{type AuthResult}
 import dao/user as user_dao
 import gleam/bit_array
 import gleam/crypto
-import gleam/option
 import gleam/result
 import midnight_domain/user.{type User}
 
@@ -16,13 +15,7 @@ pub fn validate_user(username: String, password: String) -> AuthResult(Nil) {
 
   let user_from_db =
     user_dao.get_user_by_username(username)
-    |> fn(x) {
-      case x {
-        Ok(option.Some(x)) -> Ok(x)
-        Ok(option.None) -> Error(errors.WrongUser)
-        Error(_) -> Error(errors.InternalError)
-      }
-    }
+    |> errors.unwrap_result_option(fn() { Error(errors.WrongUser) })
 
   use user <- result.try(user_from_db)
 
