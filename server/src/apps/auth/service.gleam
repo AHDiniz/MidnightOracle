@@ -1,4 +1,4 @@
-import apps/auth/errors.{type AuthError}
+import apps/auth/errors.{type AuthResult}
 import dao/user as user_dao
 import gleam/bit_array
 import gleam/crypto
@@ -9,10 +9,6 @@ import midnight_domain/user.{type User}
 fn hash_password(password: String) -> BitArray {
   crypto.hash(crypto.Sha256, bit_array.from_string(password))
 }
-
-/// Tipos de Result retornados por esse módulo, abstraindo erros internos
-pub type AuthResult(s) =
-  Result(s, AuthError)
 
 /// Diz se um par usuário-senha está correto.
 pub fn validate_user(username: String, password: String) -> AuthResult(Nil) {

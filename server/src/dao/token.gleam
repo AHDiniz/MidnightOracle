@@ -17,6 +17,7 @@ pub fn create_update_user_token(
   |> result.map(fn(_) { token_info.token })
 }
 
+/// Só retorna um token se ele for válido
 pub fn get_token_by_user(user: InternalUser) {
   base_dao.generic_get(
     fn(conn) { sql.get_valid_token_by_user_id(conn, user.id) },
