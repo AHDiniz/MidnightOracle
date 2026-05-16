@@ -1,4 +1,5 @@
 import apps/auth/errors.{type AuthResult}
+import apps/auth/token
 import dao/user as user_dao
 import gleam/bit_array
 import gleam/crypto
@@ -9,8 +10,11 @@ fn hash_password(password: String) -> BitArray {
   crypto.hash(crypto.Sha256, bit_array.from_string(password))
 }
 
-/// Diz se um par usuário-senha está correto.
-pub fn validate_user(username: String, password: String) -> AuthResult(Nil) {
+/// Retorna o token de autenticação para um user-pass, se for válido
+pub fn authenticate_user(
+  username: String,
+  password: String,
+) -> AuthResult(String) {
   let hashed_password = hash_password(password)
 
   let user_from_db =
@@ -20,7 +24,10 @@ pub fn validate_user(username: String, password: String) -> AuthResult(Nil) {
   use user <- result.try(user_from_db)
 
   case crypto.secure_compare(hashed_password, user.password) {
-    True -> Ok(Nil)
+    True -> {
+      token.get_token_for_user(user)
+      |> result.map(fn(bit_arr) { bit_array.base64_encode(bit_arr, True) })
+    }
     False -> Error(errors.WrongPass)
   }
 }

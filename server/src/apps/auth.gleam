@@ -3,6 +3,7 @@ import apps/auth/service
 import apps/utils
 import gleam/dynamic/decode
 import gleam/http
+import gleam/json
 import gleam/result
 import midnight_domain/user
 import wisp.{type Request, type Response}
@@ -32,13 +33,16 @@ fn login(req: Request) -> Response {
   use <- wisp.require_method(req, http.Post)
   use decoded <- utils.decode_json_body(req, body_decoder)
 
-  let validate_result = {
+  let auth_result = {
     use #(username, password) <- result.try(decoded)
-    service.validate_user(username, password)
+    service.authenticate_user(username, password)
   }
 
-  case validate_result {
-    Ok(_) -> wisp.accepted()
+  case auth_result {
+    Ok(token) -> {
+      [#("bearer_token", json.string(token))]
+      |> utils.fast_json_response(200)
+    }
     Error(x) -> errors.error_response(x)
   }
 }
