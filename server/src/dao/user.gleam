@@ -1,4 +1,4 @@
-import dao/base as base_dao
+import dao/base.{type DAOResult} as base_dao
 import dao/user/sql
 import gleam/option.{type Option}
 
@@ -8,14 +8,14 @@ pub type InternalUser {
 
 pub fn get_user_by_username(
   username: String,
-) -> Result(Option(InternalUser), base_dao.DAOError) {
+) -> DAOResult(Option(InternalUser)) {
   base_dao.generic_get(
     fn(conn) { sql.get_user_by_username(conn, username) },
     fn(row) { InternalUser(row.id, row.username, row.email, row.password) },
   )
 }
 
-pub fn create_user(user: InternalUser) -> Result(Nil, base_dao.DAOError) {
+pub fn create_user(user: InternalUser) -> DAOResult(Nil) {
   base_dao.generic_create(fn(conn) {
     sql.create_user(conn, user.username, user.email, user.password)
   })
