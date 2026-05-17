@@ -1,0 +1,24 @@
+info:
+  name: Auth - Me
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: http://127.0.0.1:8910/auth/me/
+  body:
+    type: json
+    data: |-
+      {
+        "username": "nome",
+        "password": "123456"
+      }
+  auth:
+    type: bearer
+    token: 24JMJ7RFJjvIUaZ7+Tj+RT/s+kWLj3k+LZcwMWgwTe2sZO3c47j+M1FFR3Lx3pl30+/Oh+PrCn6cBFIhA5e0Qw==
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

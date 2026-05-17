@@ -1,7 +1,8 @@
-import dao/base as base_dao
+import dao/base.{type DAOResult} as base_dao
 import dao/token/sql
 import dao/user.{type InternalUser}
 import dao/utils
+import gleam/option.{type Option}
 import gleam/result
 import pog
 
@@ -18,14 +19,14 @@ pub fn create_update_user_token(
 }
 
 /// Só retorna um token se ele for válido
-pub fn get_token_by_user(user: InternalUser) {
+pub fn get_token_by_user(user: InternalUser) -> DAOResult(Option(BitArray)) {
   base_dao.generic_get(
     fn(conn) { sql.get_valid_token_by_user_id(conn, user.id) },
     fn(row) { row.token },
   )
 }
 
-pub fn get_user_id_by_token(token: BitArray) {
+pub fn get_user_id_by_token(token: BitArray) -> DAOResult(Option(Int)) {
   base_dao.generic_get(fn(conn) { sql.get_user_by_token(conn, token) }, fn(row) {
     row.user_id
   })

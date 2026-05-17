@@ -61,7 +61,9 @@ pub fn get_user_by_token(
 
   "SELECT user_id
 FROM auth_token
-WHERE token = $1
+WHERE
+  token = $1
+  AND expires_at > NOW()
 "
   |> pog.query
   |> pog.parameter(pog.bytea(arg_1))
@@ -98,7 +100,7 @@ pub fn get_valid_token_by_user_id(
 FROM auth_token
 WHERE
   user_id = $1
-  AND expires_at < NOW()
+  AND expires_at > NOW()
 "
   |> pog.query
   |> pog.parameter(pog.int(arg_1))

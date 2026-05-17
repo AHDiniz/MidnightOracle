@@ -39,3 +39,8 @@ pub fn persist_user(user: User) -> AuthResult(Nil) {
   |> user_dao.create_user()
   |> errors.to_internal_error()
 }
+
+pub fn get_user(user_id: Int) -> AuthResult(User) {
+  user_dao.get_user_by_id(user_id)
+  |> errors.unwrap_result_option(fn() { Error(errors.InternalError) })
+}

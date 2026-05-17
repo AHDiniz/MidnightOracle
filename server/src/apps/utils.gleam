@@ -17,12 +17,16 @@ pub fn decode_json_body(
   next(decoded)
 }
 
+pub fn fast_to_string(json: Json) -> String {
+  json.to_string_tree(json)
+  |> string_tree.to_string()
+}
+
 pub fn fast_json_response(
   fields: List(#(String, Json)),
   code: Int,
 ) -> Response {
   json.object(fields)
-  |> json.to_string_tree()
-  |> string_tree.to_string()
+  |> fast_to_string()
   |> wisp.json_response(code)
 }
