@@ -7,6 +7,9 @@ CREATE TABLE rss_feed(
     feed_description TEXT NOT NULL,
     pub_date TIMESTAMP NOT NULL,
     last_build TIMESTAMP NOT NULL,
+    image_url TEXT NOT NULL,
+
+    UNIQUE(user_id, feed_url)
 )
 
 --- migration:down
