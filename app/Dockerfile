@@ -8,4 +8,5 @@ RUN gleam deps download
 COPY src/ ./src/
 RUN gleam build
 
-CMD [ "gleam", "run", "-m", "lustre/dev", "start", "--host=0.0.0.0" ]
+ENTRYPOINT [ "gleam" ]
+CMD [ "run", "-m", "lustre/dev", "start", "--host=0.0.0.0" ]
