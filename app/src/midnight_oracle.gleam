@@ -1,3 +1,4 @@
+import auth_view
 import lustre
 import lustre/attribute as attr
 import lustre/effect
@@ -50,19 +51,7 @@ fn update(model: msg.Model, message: msg.Message) {
 }
 
 fn view(model: msg.Model) {
-  let user = model.user
-  html.div([], [
-    html.div([], [
-      html.input([attr.value(user.username), event.on_input(msg.SetUserName)]),
-    ]),
-    html.div([], [
-      html.input([attr.value(user.email), event.on_input(msg.SetUserEmail)]),
-    ]),
-    html.div([], [
-      html.input([attr.value(user.password), event.on_input(msg.SetPassword)]),
-    ]),
-    html.div([], [html.button([event.on_click(msg.UserLogin)], [text("Login")])]),
-  ])
+  auth_view.login_form(model)
 }
 
 pub fn main() {
