@@ -1,7 +1,7 @@
 import midnight_domain/user.{type User}
 
 pub type Model {
-  Model(user: User)
+  Model(user: User, logged_in: Bool)
 }
 
 pub type Message {

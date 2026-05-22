@@ -21,7 +21,7 @@ fn update(model: msg.Model, message: msg.Message) {
           email: model.user.email,
           password: model.user.password,
         )
-      let next_model = msg.Model(next_user)
+      let next_model = msg.Model(next_user, False)
       #(next_model, effect.none())
     }
     msg.SetUserEmail(email) -> {
@@ -31,7 +31,7 @@ fn update(model: msg.Model, message: msg.Message) {
           email: email,
           password: model.user.password,
         )
-      let next_model = msg.Model(next_user)
+      let next_model = msg.Model(next_user, False)
       #(next_model, effect.none())
     }
     msg.SetPassword(password) -> {
@@ -41,10 +41,11 @@ fn update(model: msg.Model, message: msg.Message) {
           email: model.user.email,
           password: password,
         )
-      let next_model = msg.Model(next_user)
+      let next_model = msg.Model(next_user, False)
       #(next_model, effect.none())
     }
     msg.UserLogin -> {
+      let next_model = msg.Model(model.user, True)
       #(model, effect.none())
     }
   }
