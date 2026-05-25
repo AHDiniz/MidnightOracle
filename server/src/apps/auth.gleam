@@ -27,13 +27,13 @@ fn register(req: Request) -> Response {
 }
 
 fn authenticate(req: Request) -> Response {
+  use <- wisp.require_method(req, http.Post)
+
   let body_decoder = {
     use username <- decode.field("username", decode.string)
     use password <- decode.field("password", decode.string)
     decode.success(#(username, password))
   }
-
-  use <- wisp.require_method(req, http.Post)
   use decoded <- utils.decode_json_body(req, body_decoder)
 
   let auth_result = {
@@ -51,6 +51,7 @@ fn authenticate(req: Request) -> Response {
 }
 
 fn user(req: Request) -> Response {
+  use <- wisp.require_method(req, http.Get)
   use user_id <- require_auth(req)
 
   case service.get_user(user_id) {

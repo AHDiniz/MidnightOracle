@@ -18,9 +18,10 @@ docker compose up squirrel # Precisa ter o arquivo .env preenchido
 gleam run -m squirrel # Precisa ter as envvars settadas
 ```
 
-## Development
+### Rodar servidor
 
 ```sh
-gleam run   # Run the project
-gleam test  # Run the tests
+docker compose up server # Precisa ter o arquivo .env preenchido
+# ou 
+gleam run # Precisa ter as envvars settadas
 ```
