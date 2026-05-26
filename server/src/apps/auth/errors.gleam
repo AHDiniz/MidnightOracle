@@ -39,5 +39,5 @@ pub fn unwrap_result_option(
 }
 
 pub fn to_internal_error(res: Result(a, _)) -> AuthResult(a) {
-  result.map_error(res, fn(_) { InternalError })
+  result.replace_error(res, InternalError)
 }

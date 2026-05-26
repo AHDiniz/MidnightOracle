@@ -15,7 +15,7 @@ pub fn create_update_user_token(
 ) -> Result(BitArray, pog.QueryError) {
   utils.get_pog_connection()
   |> sql.create_or_update_token_by_user(token_info.user_id, token_info.token)
-  |> result.map(fn(_) { token_info.token })
+  |> result.replace(token_info.token)
 }
 
 /// Só retorna um token se ele for válido

@@ -13,7 +13,7 @@ pub fn decode_json_body(
   use body <- wisp.require_json(request)
   let decoded =
     decode.run(body, decoder)
-    |> result.map_error(fn(_) { errors.BadRequest })
+    |> result.replace_error(errors.BadRequest)
   next(decoded)
 }
 

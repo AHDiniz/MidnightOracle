@@ -81,7 +81,7 @@ pub fn require_auth(
     req.headers
     |> list.key_find("authorization")
 
-  let token_result = {
+  let read_token_result = {
     use header <- result.try(header_result)
     let token_res = case header {
       "Bearer " <> token -> Ok(token)
@@ -93,9 +93,10 @@ pub fn require_auth(
   }
 
   let res = {
-    use token_bit <- result.try(
-      result.map_error(token_result, fn(_) { errors.Unauthorized }),
-    )
+    use token_bit <- result.try(result.replace_error(
+      read_token_result,
+      errors.Unauthorized,
+    ))
     token.get_user_by_token(token_bit)
   }
 
