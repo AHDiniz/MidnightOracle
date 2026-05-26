@@ -2,6 +2,22 @@ opencollection: 1.0.0
 
 info:
   name: Midnight Oracle
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
+
+request:
+  auth:
+    type: bearer
+    token: Jt2oV1rDLzlyIFIc9iPWUkkyVhM59OzL5yISUv/HY+meYWi3/w4Y0ZmQLU9QcmmYrC70t71FNTjXwSfG1UbCGA==
 bundled: false
 extensions:
   bruno:

@@ -4,18 +4,9 @@ info:
   seq: 3
 
 http:
-  method: POST
+  method: GET
   url: http://127.0.0.1:8910/auth/me/
-  body:
-    type: json
-    data: |-
-      {
-        "username": "nome",
-        "password": "123456"
-      }
-  auth:
-    type: bearer
-    token: mNSyAwp1fYbfY6USJZEN55nrzb5RFPXjUnhEeQ7nbwFOBgmn8seU8bYYXt1FI0u6aGxY4wnF27czEUuN9K0HtQ==
+  auth: inherit
 
 settings:
   encodeUrl: true

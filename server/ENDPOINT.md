@@ -22,7 +22,7 @@ Endpoints de registro, login, e info de usuário
   {
     username: str,
     password: str,
-    email: str
+    email: str,
   }
   ```
 
@@ -43,7 +43,14 @@ Endpoints de registro, login, e info de usuário
 * `auth/me`: Retorna as informações de um usuário autenticado
   * Requisição GET
   * Requer que o token de acesso seja mandado via Header, nome `authorization`
-  * Se bem sucedido, retorna código 200
+  * Se bem sucedido, retorna código 200 com as informações no body, no formato:
+
+  ```ts
+  {
+    username: str,
+    email: str,
+  }
+  ```
 
 Os endpoints desse módulo compartilham o tratamento de erros.
 Os erros possíveis são:
