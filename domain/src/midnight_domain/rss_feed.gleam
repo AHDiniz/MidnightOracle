@@ -1,5 +1,3 @@
-import gleam/time/timestamp.{type Timestamp}
-
 pub type RssFeed {
   RssFeed(
     id: Int,
@@ -7,8 +5,8 @@ pub type RssFeed {
     feed_url: String,
     feed_title: String,
     feed_description: String,
-    pub_date: Timestamp,
-    last_build: Timestamp,
+    pub_date: String,
+    last_build: String,
     image_url: String,
   )
 }

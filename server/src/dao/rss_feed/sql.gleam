@@ -5,7 +5,6 @@
 ////
 
 import gleam/dynamic/decode
-import gleam/time/timestamp.{type Timestamp}
 import pog
 
 /// Runs the `create_feed` query
@@ -20,8 +19,8 @@ pub fn create_feed(
   arg_2: String,
   arg_3: String,
   arg_4: String,
-  arg_5: Timestamp,
-  arg_6: Timestamp,
+  arg_5: String,
+  arg_6: String,
   arg_7: String,
 ) -> Result(pog.Returned(Nil), pog.QueryError) {
   let decoder = decode.map(decode.dynamic, fn(_) { Nil })
@@ -42,8 +41,8 @@ VALUES ($1, $2, $3, $4, $5, $6, $7)
   |> pog.parameter(pog.text(arg_2))
   |> pog.parameter(pog.text(arg_3))
   |> pog.parameter(pog.text(arg_4))
-  |> pog.parameter(pog.timestamp(arg_5))
-  |> pog.parameter(pog.timestamp(arg_6))
+  |> pog.parameter(pog.text(arg_5))
+  |> pog.parameter(pog.text(arg_6))
   |> pog.parameter(pog.text(arg_7))
   |> pog.returning(decoder)
   |> pog.execute(db)
@@ -62,8 +61,8 @@ pub type ListFeedsByUserIdRow {
     feed_url: String,
     feed_title: String,
     feed_description: String,
-    pub_date: Timestamp,
-    last_build: Timestamp,
+    pub_date: String,
+    last_build: String,
     image_url: String,
   )
 }
@@ -84,8 +83,8 @@ pub fn list_feeds_by_user_id(
     use feed_url <- decode.field(2, decode.string)
     use feed_title <- decode.field(3, decode.string)
     use feed_description <- decode.field(4, decode.string)
-    use pub_date <- decode.field(5, pog.timestamp_decoder())
-    use last_build <- decode.field(6, pog.timestamp_decoder())
+    use pub_date <- decode.field(5, decode.string)
+    use last_build <- decode.field(6, decode.string)
     use image_url <- decode.field(7, decode.string)
     decode.success(ListFeedsByUserIdRow(
       id:,

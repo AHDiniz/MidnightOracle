@@ -1,6 +1,7 @@
 //// Ref: https://github.com/gleam-wisp/wisp/blob/main/examples/src/routing/app/router.gleam
 
 import apps/auth
+import apps/feed
 import server/middleware
 import wisp.{type Request, type Response}
 
@@ -14,6 +15,7 @@ pub fn handle_request(req: Request) -> Response {
     ["ping"] -> wisp.json_response("{\"ping\": \"pong\"}", 200)
 
     ["auth", ..path] -> auth.router(req, path)
+    ["feed", ..path] -> feed.router(req, path)
 
     _ -> wisp.not_found()
   }

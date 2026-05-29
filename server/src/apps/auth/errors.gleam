@@ -41,3 +41,7 @@ pub fn unwrap_result_option(
 pub fn to_internal_error(res: Result(a, _)) -> AuthResult(a) {
   result.replace_error(res, InternalError)
 }
+
+pub fn to_bad_request(res: Result(a, _)) -> AuthResult(a) {
+  result.replace_error(res, BadRequest)
+}
