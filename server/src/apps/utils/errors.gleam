@@ -42,6 +42,10 @@ pub fn to_internal_error(res: Result(a, _)) -> ServerResult(a) {
   result.replace_error(res, InternalError)
 }
 
+pub fn to_unauthorized(res: Result(a, _)) -> ServerResult(a) {
+  result.replace_error(res, Unauthorized)
+}
+
 pub fn to_bad_request(res: Result(a, _)) -> ServerResult(a) {
   result.replace_error(res, BadRequest)
 }

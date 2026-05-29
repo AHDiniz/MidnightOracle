@@ -93,10 +93,7 @@ pub fn require_auth(
   }
 
   let res = {
-    use token_bit <- result.try(result.replace_error(
-      read_token_result,
-      errors.Unauthorized,
-    ))
+    use token_bit <- result.try(read_token_result |> errors.to_unauthorized())
     token.get_user_by_token(token_bit)
   }
 

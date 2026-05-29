@@ -1,7 +1,6 @@
 import apps/utils/errors.{type ServerError}
 import gleam/dynamic/decode
 import gleam/json.{type Json}
-import gleam/result
 import gleam/string_tree
 import wisp.{type Request, type Response}
 
@@ -13,7 +12,7 @@ pub fn decode_json_body(
   use body <- wisp.require_json(request)
   let decoded =
     decode.run(body, decoder)
-    |> result.replace_error(errors.BadRequest)
+    |> errors.to_bad_request()
   next(decoded)
 }
 
