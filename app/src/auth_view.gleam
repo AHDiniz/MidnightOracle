@@ -23,6 +23,7 @@ pub fn login_form(model: msg.Model) {
       ]),
     ]),
     html.div([], [html.button([event.on_click(msg.UserLogin)], [text("Login")])]),
+    html.div([], [html.button([event.on_click(msg.GoToPage(msg.Register))], [text("Register")])]),
   ])
 }
 

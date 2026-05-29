@@ -10,7 +10,7 @@ pub fn login_controller(model: msg.Model) -> msg.Model {
       model
     }
     Ok(user) -> {
-      let next_model = msg.Model(user, True)
+      let next_model = msg.Model(user, -1)
       next_model
     }
   }
@@ -26,7 +26,7 @@ pub fn register_controller(model: msg.Model) -> msg.Model {
       model
     }
     Ok(user) -> {
-      let next_model = msg.Model(user, True)
+      let next_model = msg.Model(user, -1)
       next_model
     }
   }

@@ -19,8 +19,8 @@ pub fn login_service(user: User) -> Result(User, AuthError) {
     request.new()
     |> request.set_host("localhost")
     |> request.set_port(8910)
-    |> request.set_method(http.Get)
-    |> request.set_path("auth/")
+    |> request.set_method(http.Post)
+    |> request.set_path("auth/login")
     |> request.set_body(json.to_string(j))
 
   let request_result = request.get_query(r)
@@ -38,5 +38,31 @@ pub fn login_service(user: User) -> Result(User, AuthError) {
 }
 
 pub fn register_service(user: User) -> Result(User, AuthError) {
-  Ok(user)
+  let j =
+    json.object([
+      #("username", json.string(user.username)),
+      #("password", json.string(user.password)),
+      #("email", json.string(user.email)),
+    ])
+
+  let r =
+    request.new()
+    |> request.set_host("localhost")
+    |> request.set_port(8910)
+    |> request.set_method(http.Post)
+    |> request.set_path("auth/register")
+    |> request.set_body(json.to_string(j))
+
+  let request_result = request.get_query(r)
+
+  let service_result = case request_result {
+    Error(Nil) -> {
+      Error(CouldNotRegister)
+    }
+    Ok(data) -> {
+      Ok(user)
+    }
+  }
+
+  service_result
 }

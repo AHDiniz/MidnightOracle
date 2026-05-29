@@ -17,6 +17,8 @@ target = "javascript"
 gleam_stdlib = ">= 1.0.0 and < 2.0.0"
 lustre = ">= 5.6.0 and < 6.0.0"
 midnight_domain = { path="../domain" }
+gleam_http = ">= 4.3.0 and < 5.0.0"
+gleam_json = ">= 3.1.0 and < 4.0.0"
 
 [dev_dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"

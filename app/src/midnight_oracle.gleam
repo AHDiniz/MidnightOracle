@@ -21,7 +21,7 @@ fn update(model: msg.Model, message: msg.Message) {
           email: model.user.email,
           password: model.user.password,
         )
-      let next_model = msg.Model(next_user, False)
+      let next_model = msg.Model(next_user, -1)
       #(next_model, effect.none())
     }
     msg.SetUserEmail(email) -> {
@@ -31,7 +31,7 @@ fn update(model: msg.Model, message: msg.Message) {
           email: email,
           password: model.user.password,
         )
-      let next_model = msg.Model(next_user, False)
+      let next_model = msg.Model(next_user, -1)
       #(next_model, effect.none())
     }
     msg.SetPassword(password) -> {
@@ -41,24 +41,38 @@ fn update(model: msg.Model, message: msg.Message) {
           email: model.user.email,
           password: password,
         )
-      let next_model = msg.Model(next_user, False)
+      let next_model = msg.Model(next_user, -1)
       #(next_model, effect.none())
     }
     msg.UserLogin -> {
-      let next_model = msg.Model(model.user, True)
+      let next_model = msg.Model(model.user, -1)
       #(model, effect.none())
+    }
+    msg.GoToPage(page) -> {
+      case page {
+        _ -> {
+          #(model, effect.none())
+        }
+      }
     }
   }
 }
 
 fn view(model: msg.Model) {
-  auth_view.login_form(model)
+  case model.token {
+    -1 -> {
+      auth_view.login_form(model)
+    }
+    _ -> {
+
+    }
+  }
 }
 
 pub fn main() {
   let app = lustre.application(init, update, view)
   let user = User(username: "", email: "", password: "")
-  let model = msg.Model(user: user)
+  let model = msg.Model(user, -1)
   let assert Ok(_) = lustre.start(app, "div", model)
 
   Nil
