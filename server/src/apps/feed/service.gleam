@@ -1,5 +1,5 @@
-import apps/auth/errors
 import apps/feed/xml
+import apps/utils/errors
 import dao/rss_feed
 import gleam/http
 import gleam/http/request

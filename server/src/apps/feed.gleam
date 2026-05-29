@@ -1,7 +1,7 @@
 import apps/auth
-import apps/auth/errors
 import apps/feed/service
 import apps/utils
+import apps/utils/errors
 import gleam/dynamic/decode
 import gleam/http
 import gleam/result

@@ -1,7 +1,7 @@
-import apps/auth/errors
 import apps/auth/service
 import apps/auth/token
 import apps/utils
+import apps/utils/errors
 import gleam/bit_array
 import gleam/dynamic/decode
 import gleam/http
