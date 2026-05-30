@@ -4,10 +4,12 @@ import apps/utils
 import apps/utils/errors
 import gleam/dynamic/decode
 import gleam/http
+import gleam/json
 import gleam/result
+import midnight_domain/rss_feed
 import wisp.{type Request, type Response}
 
-pub fn create_feed(req: Request) -> Response {
+fn create_feed(req: Request) -> Response {
   use <- wisp.require_method(req, http.Post)
   use user_id <- auth.require_auth(req)
 
@@ -28,9 +30,24 @@ pub fn create_feed(req: Request) -> Response {
   }
 }
 
+fn list_feeds(req: Request) -> Response {
+  use <- wisp.require_method(req, http.Get)
+  use user_id <- auth.require_auth(req)
+
+  let res = service.get_feeds_from_user(user_id)
+
+  use feeds <- errors.try_response(res)
+
+  feeds
+  |> json.array(rss_feed.encoder)
+  |> json.to_string()
+  |> wisp.json_response(200)
+}
+
 pub fn router(req: Request, path: List(String)) -> Response {
   case path {
     ["create"] -> create_feed(req)
+    ["list"] -> list_feeds(req)
     _ -> wisp.not_found()
   }
 }
