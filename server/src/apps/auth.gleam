@@ -41,26 +41,22 @@ fn authenticate(req: Request) -> Response {
     service.authenticate_user(username, password)
   }
 
-  case auth_result {
-    Ok(token) -> {
-      [#("bearer_token", json.string(token))]
-      |> utils.fast_json_response(200)
-    }
-    Error(x) -> errors.error_response(x)
-  }
+  use token <- errors.try_response(auth_result)
+
+  [#("bearer_token", json.string(token))]
+  |> utils.fast_json_response(200)
 }
 
 fn user(req: Request) -> Response {
   use <- wisp.require_method(req, http.Get)
   use user_id <- require_auth(req)
 
-  case service.get_user(user_id) {
-    Ok(user) ->
-      user.encoder(user)
-      |> utils.fast_to_string()
-      |> wisp.json_response(200)
-    Error(err) -> errors.error_response(err)
-  }
+  use user <- errors.try_response(service.get_user(user_id))
+
+  user
+  |> user.encoder()
+  |> utils.fast_to_string()
+  |> wisp.json_response(200)
 }
 
 pub fn router(req: Request, path: List(String)) -> Response {

@@ -40,7 +40,7 @@ fn list_feeds(req: Request) -> Response {
 
   feeds
   |> json.array(rss_feed.encoder)
-  |> json.to_string()
+  |> utils.fast_to_string()
   |> wisp.json_response(200)
 }
 
