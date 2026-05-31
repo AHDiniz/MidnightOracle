@@ -4,6 +4,7 @@ import midnight_domain/rss_feed.{type RssFeed}
 
 pub fn create_rss_feed(
   user_id: Int,
+  rss_url: String,
   feed_url: String,
   feed_title: String,
   feed_description: String,
@@ -15,6 +16,7 @@ pub fn create_rss_feed(
     sql.create_feed(
       conn,
       user_id,
+      rss_url,
       feed_url,
       feed_title,
       feed_description,
@@ -32,6 +34,7 @@ pub fn list_rss_feed_by_user_id(user_id: Int) -> DAOResult(List(RssFeed)) {
       rss_feed.RssFeed(
         row.id,
         row.user_id,
+        row.rss_url,
         row.feed_url,
         row.feed_title,
         row.feed_description,

@@ -22,11 +22,13 @@ pub fn create_feed(
   arg_5: String,
   arg_6: String,
   arg_7: String,
+  arg_8: String,
 ) -> Result(pog.Returned(Nil), pog.QueryError) {
   let decoder = decode.map(decode.dynamic, fn(_) { Nil })
 
   "INSERT INTO rss_feed(
   user_id,
+  rss_url,
   feed_url,
   feed_title,
   feed_description,
@@ -34,7 +36,7 @@ pub fn create_feed(
   last_build,
   image_url
 )
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 "
   |> pog.query
   |> pog.parameter(pog.int(arg_1))
@@ -44,6 +46,7 @@ VALUES ($1, $2, $3, $4, $5, $6, $7)
   |> pog.parameter(pog.text(arg_5))
   |> pog.parameter(pog.text(arg_6))
   |> pog.parameter(pog.text(arg_7))
+  |> pog.parameter(pog.text(arg_8))
   |> pog.returning(decoder)
   |> pog.execute(db)
 }
@@ -58,6 +61,7 @@ pub type ListFeedsByUserIdRow {
   ListFeedsByUserIdRow(
     id: Int,
     user_id: Int,
+    rss_url: String,
     feed_url: String,
     feed_title: String,
     feed_description: String,
@@ -80,15 +84,17 @@ pub fn list_feeds_by_user_id(
   let decoder = {
     use id <- decode.field(0, decode.int)
     use user_id <- decode.field(1, decode.int)
-    use feed_url <- decode.field(2, decode.string)
-    use feed_title <- decode.field(3, decode.string)
-    use feed_description <- decode.field(4, decode.string)
-    use pub_date <- decode.field(5, decode.string)
-    use last_build <- decode.field(6, decode.string)
-    use image_url <- decode.field(7, decode.string)
+    use rss_url <- decode.field(2, decode.string)
+    use feed_url <- decode.field(3, decode.string)
+    use feed_title <- decode.field(4, decode.string)
+    use feed_description <- decode.field(5, decode.string)
+    use pub_date <- decode.field(6, decode.string)
+    use last_build <- decode.field(7, decode.string)
+    use image_url <- decode.field(8, decode.string)
     decode.success(ListFeedsByUserIdRow(
       id:,
       user_id:,
+      rss_url:,
       feed_url:,
       feed_title:,
       feed_description:,
@@ -101,6 +107,7 @@ pub fn list_feeds_by_user_id(
   "SELECT
   id,
   user_id,
+  rss_url,
   feed_url,
   feed_title,
   feed_description,

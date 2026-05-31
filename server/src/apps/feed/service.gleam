@@ -8,10 +8,10 @@ import gleam/result
 import midnight_domain/rss_feed.{type RssFeed}
 
 pub fn create_feed_from_url(
-  feed_url: String,
+  rss_url: String,
   user_id: Int,
 ) -> ServerResult(Nil) {
-  use req <- result.try(request.to(feed_url) |> errors.to_internal_error())
+  use req <- result.try(request.to(rss_url) |> errors.to_internal_error())
   let req = request.set_method(req, http.Get)
 
   use res <- result.try(httpc.send(req) |> errors.to_internal_error())
@@ -22,6 +22,7 @@ pub fn create_feed_from_url(
 
   feed_dao.create_rss_feed(
     user_id,
+    rss_url,
     fields.feed_url,
     fields.feed_title,
     fields.feed_description,
