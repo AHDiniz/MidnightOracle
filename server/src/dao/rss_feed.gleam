@@ -83,3 +83,9 @@ pub fn update_rss_feed_by_id(
     )
   })
 }
+
+pub fn delete_rss_feed_by_id(rss_feed_id: Int, user_id: Int) -> DAOResult(Nil) {
+  base_dao.run_nil_query(fn(conn) {
+    sql.delete_feed_by_user_and_id(conn, rss_feed_id, user_id)
+  })
+}

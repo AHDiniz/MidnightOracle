@@ -66,3 +66,7 @@ pub fn update_feed_from_user(user_id: Int, feed_id: Int) -> ServerResult(_) {
   )
   |> errors.to_internal_error()
 }
+
+pub fn delete_feed_from_user(user_id: Int, feed_id: Int) -> ServerResult(_) {
+  feed_dao.delete_rss_feed_by_id(feed_id, user_id) |> errors.to_internal_error
+}

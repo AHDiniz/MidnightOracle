@@ -51,6 +51,29 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
   |> pog.execute(db)
 }
 
+/// Runs the `delete_feed_by_user_and_id` query
+/// defined in `./src/dao/rss_feed/sql/delete_feed_by_user_and_id.sql`.
+///
+/// > 🐿️ This function was generated automatically using v4.6.0 of
+/// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
+///
+pub fn delete_feed_by_user_and_id(
+  db: pog.Connection,
+  arg_1: Int,
+  arg_2: Int,
+) -> Result(pog.Returned(Nil), pog.QueryError) {
+  let decoder = decode.map(decode.dynamic, fn(_) { Nil })
+
+  "DELETE FROM rss_feed
+WHERE id = $1 AND user_id = $2
+"
+  |> pog.query
+  |> pog.parameter(pog.int(arg_1))
+  |> pog.parameter(pog.int(arg_2))
+  |> pog.returning(decoder)
+  |> pog.execute(db)
+}
+
 /// A row you get from running the `get_feed_by_user_and_id` query
 /// defined in `./src/dao/rss_feed/sql/get_feed_by_user_and_id.sql`.
 ///
