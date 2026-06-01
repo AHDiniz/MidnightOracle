@@ -7,7 +7,7 @@ pub type Page {
 }
 
 pub type Model {
-  Model(user: User, token: Int)
+  Model(user: User, token: Int, current_page: Page)
 }
 
 pub type Message {
@@ -15,5 +15,6 @@ pub type Message {
   SetUserEmail(email: String)
   SetPassword(password: String)
   UserLogin
-  GoToPage(page : Page)
+  UserRegister
+  GoToPage(page: Page)
 }

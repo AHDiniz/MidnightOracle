@@ -23,7 +23,11 @@ pub fn login_form(model: msg.Model) {
       ]),
     ]),
     html.div([], [html.button([event.on_click(msg.UserLogin)], [text("Login")])]),
-    html.div([], [html.button([event.on_click(msg.GoToPage(msg.Register))], [text("Register")])]),
+    html.div([], [
+      html.button([event.on_click(msg.GoToPage(msg.Register))], [
+        text("Register"),
+      ]),
+    ]),
   ])
 }
 
@@ -52,6 +56,13 @@ pub fn register_form(model: msg.Model) {
         event.on_input(msg.SetPassword),
       ]),
     ]),
-    html.div([], [html.button([event.on_click(msg.UserLogin)], [text("Login")])]),
+    html.div([], [
+      html.button([event.on_click(msg.UserRegister)], [text("Register")]),
+    ]),
+    html.div([], [
+      html.button([event.on_click(msg.GoToPage(msg.Login))], [
+        text("Login"),
+      ]),
+    ]),
   ])
 }
