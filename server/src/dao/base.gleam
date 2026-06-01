@@ -34,22 +34,22 @@ fn handle_get_result(
   }
 }
 
-pub fn generic_get(
+pub fn run_get_query(
   query_fn: QueryFn(row_type),
   constructor: fn(row_type) -> domain_type,
 ) -> DAOResult(Option(domain_type)) {
   utils.get_pog_connection() |> query_fn() |> handle_get_result(constructor)
 }
 
-fn handle_create_result(result: PogResult(Nil)) -> DAOResult(Nil) {
+fn handle_nil_result(result: PogResult(Nil)) -> DAOResult(Nil) {
   case result {
     Ok(_) -> Ok(Nil)
     Error(x) -> Error(PogError(x))
   }
 }
 
-pub fn generic_create(query_fn: QueryFn(_)) -> DAOResult(Nil) {
-  utils.get_pog_connection() |> query_fn() |> handle_create_result()
+pub fn run_nil_query(query_fn: QueryFn(_)) -> DAOResult(Nil) {
+  utils.get_pog_connection() |> query_fn() |> handle_nil_result()
 }
 
 fn handle_list_result(
@@ -62,7 +62,7 @@ fn handle_list_result(
   }
 }
 
-pub fn generic_list(
+pub fn run_list_query(
   query_fn: QueryFn(row_type),
   constructor: fn(row_type) -> domain_type,
 ) -> DAOResult(List(domain_type)) {

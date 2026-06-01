@@ -8,7 +8,7 @@ pub type InternalUser {
 }
 
 pub fn get_user_by_id(id: Int) -> DAOResult(Option(user.User)) {
-  base_dao.generic_get(fn(conn) { sql.get_user_by_id(conn, id) }, fn(row) {
+  base_dao.run_get_query(fn(conn) { sql.get_user_by_id(conn, id) }, fn(row) {
     user.User(row.username, row.email, "")
   })
 }
@@ -16,14 +16,14 @@ pub fn get_user_by_id(id: Int) -> DAOResult(Option(user.User)) {
 pub fn get_user_by_username(
   username: String,
 ) -> DAOResult(Option(InternalUser)) {
-  base_dao.generic_get(
+  base_dao.run_get_query(
     fn(conn) { sql.get_user_by_username(conn, username) },
     fn(row) { InternalUser(row.id, row.username, row.email, row.password) },
   )
 }
 
 pub fn create_user(user: InternalUser) -> DAOResult(Nil) {
-  base_dao.generic_create(fn(conn) {
+  base_dao.run_nil_query(fn(conn) {
     sql.create_user(conn, user.username, user.email, user.password)
   })
 }

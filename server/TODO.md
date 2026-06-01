@@ -24,11 +24,15 @@
 - [ ] Feeds RSS
   - [x] Registrar Feeds
   - [x] Listar Feeds
-  - [ ] Atualizar info de Feeds
+  - [x] Atualizar info de Feeds
+  - [ ] Deletar Feeds
 - [ ] Itens de feed RSS
   - [ ] Listar Itens salvos
   - [ ] Salvar Itens
+  - [ ] Deletar Itens
 - [ ] Categorias
   - [ ] Criar novas
   - [ ] Atrelar a Feeds
+    - [ ] Desatrelar
   - [ ] Atrelar a Itens
+    - [ ] Desatrelar
