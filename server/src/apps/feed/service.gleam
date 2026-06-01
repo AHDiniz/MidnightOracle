@@ -7,14 +7,18 @@ import gleam/httpc
 import gleam/result
 import midnight_domain/rss_feed.{type RssFeed}
 
+fn get_request(url: String) -> ServerResult(_) {
+  use req <- result.try(request.to(url) |> errors.to_internal_error())
+  let req = request.set_method(req, http.Get)
+
+  httpc.send(req) |> errors.to_internal_error()
+}
+
 pub fn create_feed_from_url(
   rss_url: String,
   user_id: Int,
 ) -> ServerResult(Nil) {
-  use req <- result.try(request.to(rss_url) |> errors.to_internal_error())
-  let req = request.set_method(req, http.Get)
-
-  use res <- result.try(httpc.send(req) |> errors.to_internal_error())
+  use res <- result.try(get_request(rss_url))
 
   use fields <- result.try(
     xml.get_feed_fields(res.body) |> errors.to_bad_request(),
