@@ -2,7 +2,7 @@ import gleam/bool
 import gleam/result
 import xmlm.{type Input, Data, Dtd, ElementEnd, ElementStart, Name, Tag}
 
-pub fn get_feed_fields(xml_string: String) -> Result(_, _) {
+pub fn get_feed_fields(xml_string: String) -> Result(RssFeedFields, String) {
   let xml_input = xmlm.from_string(xml_string)
 
   use input <- result.try(consume_dtd(xml_input))
@@ -14,7 +14,7 @@ pub fn get_feed_fields(xml_string: String) -> Result(_, _) {
     empty_builder(),
   ))
 
-  echo builder_to_fields(builder)
+  builder_to_fields(builder)
 }
 
 // Utilitários para construir o RssFeed a partir do XML

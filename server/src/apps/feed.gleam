@@ -8,6 +8,15 @@ import gleam/json
 import midnight_domain/rss_feed
 import wisp.{type Request, type Response}
 
+pub fn router(req: Request, path: List(String)) -> Response {
+  case path {
+    ["create"] -> create_feed(req)
+    ["list"] -> list_feeds(req)
+    ["update"] -> update_feed(req)
+    _ -> wisp.not_found()
+  }
+}
+
 fn create_feed(req: Request) -> Response {
   use <- wisp.require_method(req, http.Post)
   use user_id <- auth.require_auth(req)
@@ -39,10 +48,19 @@ fn list_feeds(req: Request) -> Response {
   |> wisp.json_response(200)
 }
 
-pub fn router(req: Request, path: List(String)) -> Response {
-  case path {
-    ["create"] -> create_feed(req)
-    ["list"] -> list_feeds(req)
-    _ -> wisp.not_found()
+pub fn update_feed(req: Request) -> Response {
+  use <- wisp.require_method(req, http.Post)
+  use user_id <- auth.require_auth(req)
+
+  let decoder = {
+    use feed_id <- decode.field("feed_id", decode.int)
+    decode.success(feed_id)
   }
+  use decoded <- utils.decode_json_body(req, decoder)
+  use feed_id <- errors.try_response(decoded)
+
+  let update_res = service.update_feed_from_user(user_id, feed_id)
+  use _ <- errors.try_response(update_res)
+
+  wisp.json_response("{}", 201)
 }
