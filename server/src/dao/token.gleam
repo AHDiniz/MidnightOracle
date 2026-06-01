@@ -20,14 +20,15 @@ pub fn create_update_user_token(
 
 /// Só retorna um token se ele for válido
 pub fn get_token_by_user(user: InternalUser) -> DAOResult(Option(BitArray)) {
-  base_dao.generic_get(
+  base_dao.run_get_query(
     fn(conn) { sql.get_valid_token_by_user_id(conn, user.id) },
     fn(row) { row.token },
   )
 }
 
 pub fn get_user_id_by_token(token: BitArray) -> DAOResult(Option(Int)) {
-  base_dao.generic_get(fn(conn) { sql.get_user_by_token(conn, token) }, fn(row) {
-    row.user_id
-  })
+  base_dao.run_get_query(
+    fn(conn) { sql.get_user_by_token(conn, token) },
+    fn(row) { row.user_id },
+  )
 }

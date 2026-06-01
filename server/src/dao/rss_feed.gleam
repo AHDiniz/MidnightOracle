@@ -12,7 +12,7 @@ pub fn create_rss_feed(
   last_build: String,
   image_url: String,
 ) -> DAOResult(Nil) {
-  base_dao.generic_create(fn(conn) {
+  base_dao.run_nil_query(fn(conn) {
     sql.create_feed(
       conn,
       user_id,
@@ -28,7 +28,7 @@ pub fn create_rss_feed(
 }
 
 pub fn list_rss_feed_by_user_id(user_id: Int) -> DAOResult(List(RssFeed)) {
-  base_dao.generic_list(
+  base_dao.run_list_query(
     fn(conn) { sql.list_feeds_by_user_id(conn, user_id) },
     fn(row) {
       rss_feed.RssFeed(
