@@ -1,6 +1,7 @@
 SELECT
   id,
   user_id,
+  rss_url,
   feed_url,
   feed_title,
   feed_description,

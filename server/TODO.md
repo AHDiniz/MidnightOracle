@@ -11,7 +11,7 @@
   - Eu argumentaria que já temos um exemplo de funcionalidade CRUD com
   a criação de usuários, apesar de ela estar limitada à Create e Read.
 - [ ] Lista 3 - Funcionalidades não-CRUD
-  - Eu acho que a funcionalidade de puxar o conteúdo dos feeds RSS conta para isso
+  - Eu acho que a funcionalidade de ler o conteúdo dos feeds RSS a partir do XML já conta
 - [ ] Lista 4 - Autorização
   - Não estava previsto no trabalho inicial, podemos adicionar o conceito de Admin,
   que pode ter uma funcionalidade de deletar outros usuários
@@ -22,8 +22,8 @@
   - [x] Registrar
   - [x] Logar
 - [ ] Feeds RSS
-  - [ ] Listar Feeds
-  - [ ] Registrar Feeds
+  - [x] Registrar Feeds
+  - [x] Listar Feeds
   - [ ] Atualizar info de Feeds
 - [ ] Itens de feed RSS
   - [ ] Listar Itens salvos

@@ -1,6 +1,7 @@
 //// Basic/Generic definitions for the DAOs
 
 import dao/utils
+import gleam/list
 import gleam/option.{type Option}
 import gleam/result
 import pog
@@ -15,8 +16,14 @@ pub type DAOError {
 pub type DAOResult(a) =
   Result(a, DAOError)
 
+type PogResult(a) =
+  Result(pog.Returned(a), pog.QueryError)
+
+type QueryFn(a) =
+  fn(pog.Connection) -> PogResult(a)
+
 fn handle_get_result(
-  result: Result(pog.Returned(row_type), pog.QueryError),
+  result: PogResult(row_type),
   constructor: fn(row_type) -> domain_type,
 ) -> DAOResult(Option(domain_type)) {
   case result.map(result, fn(x) { x.rows }) {
@@ -28,23 +35,36 @@ fn handle_get_result(
 }
 
 pub fn generic_get(
-  query_fn: fn(pog.Connection) -> Result(pog.Returned(row_type), pog.QueryError),
+  query_fn: QueryFn(row_type),
   constructor: fn(row_type) -> domain_type,
 ) -> DAOResult(Option(domain_type)) {
   utils.get_pog_connection() |> query_fn() |> handle_get_result(constructor)
 }
 
-fn handle_create_result(
-  result: Result(pog.Returned(Nil), pog.QueryError),
-) -> DAOResult(Nil) {
+fn handle_create_result(result: PogResult(Nil)) -> DAOResult(Nil) {
   case result {
     Ok(_) -> Ok(Nil)
     Error(x) -> Error(PogError(x))
   }
 }
 
-pub fn generic_create(
-  query_fn: fn(pog.Connection) -> Result(pog.Returned(_), pog.QueryError),
-) -> DAOResult(Nil) {
+pub fn generic_create(query_fn: QueryFn(_)) -> DAOResult(Nil) {
   utils.get_pog_connection() |> query_fn() |> handle_create_result()
+}
+
+fn handle_list_result(
+  result: PogResult(row_type),
+  constructor: fn(row_type) -> domain_type,
+) -> DAOResult(List(domain_type)) {
+  case result {
+    Ok(ret) -> Ok(ret.rows |> list.map(constructor))
+    Error(x) -> Error(PogError(x))
+  }
+}
+
+pub fn generic_list(
+  query_fn: QueryFn(row_type),
+  constructor: fn(row_type) -> domain_type,
+) -> DAOResult(List(domain_type)) {
+  utils.get_pog_connection() |> query_fn() |> handle_list_result(constructor)
 }

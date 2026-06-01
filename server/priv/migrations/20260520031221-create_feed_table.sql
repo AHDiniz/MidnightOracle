@@ -2,6 +2,7 @@
 CREATE TABLE rss_feed(
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     user_id INT REFERENCES users NOT NULL,
+    rss_url TEXT NOT NULL,
     feed_url TEXT NOT NULL,
     feed_title TEXT NOT NULL,
     feed_description TEXT NOT NULL,

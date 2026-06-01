@@ -14,6 +14,18 @@ pub type ServerError {
 pub type ServerResult(s) =
   Result(s, ServerError)
 
+pub fn to_internal_error(res: Result(a, _)) -> ServerResult(a) {
+  result.replace_error(res, InternalError)
+}
+
+pub fn to_unauthorized(res: Result(a, _)) -> ServerResult(a) {
+  result.replace_error(res, Unauthorized)
+}
+
+pub fn to_bad_request(res: Result(a, _)) -> ServerResult(a) {
+  result.replace_error(res, BadRequest)
+}
+
 fn error_json_response(msg: String, code: Int) {
   wisp.json_response("{\"error\": \"" <> msg <> "\"}", code)
 }
@@ -38,14 +50,12 @@ pub fn unwrap_result_option(
   }
 }
 
-pub fn to_internal_error(res: Result(a, _)) -> ServerResult(a) {
-  result.replace_error(res, InternalError)
-}
-
-pub fn to_unauthorized(res: Result(a, _)) -> ServerResult(a) {
-  result.replace_error(res, Unauthorized)
-}
-
-pub fn to_bad_request(res: Result(a, _)) -> ServerResult(a) {
-  result.replace_error(res, BadRequest)
+pub fn try_response(
+  res: ServerResult(a),
+  callback: fn(a) -> Response,
+) -> Response {
+  case res {
+    Ok(val) -> callback(val)
+    Error(err) -> error_response(err)
+  }
 }
