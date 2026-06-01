@@ -36,12 +36,15 @@ fn update(model: msg.Model, message: msg.Message) {
 }
 
 fn view(model: msg.Model) {
-  case model.token {
-    -1 -> {
+  case model.current_page {
+    msg.Login -> {
       auth_view.login_form(model)
     }
+    msg.Register -> {
+      auth_view.register_form(model)
+    }
     _ -> {
-      todo
+      html.div([], [])
     }
   }
 }
