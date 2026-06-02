@@ -1,13 +1,13 @@
 import application as app
 import lustre/effect
 import messages as msg
-import midnight_domain/user.{type User, User}
+import midnight_domain/user
 
-pub fn login_update(model: msg.Model, message: msg.Message) {
+pub fn login_update(model: msg.Model, message: msg.Message) -> #(msg.Model, effect.Effect(msg.Message)) {
   case message {
     msg.SetUserName(username) -> {
       let next_user =
-        User(
+        user.User(
           username: username,
           email: model.user.email,
           password: model.user.password,
@@ -17,7 +17,7 @@ pub fn login_update(model: msg.Model, message: msg.Message) {
     }
     msg.SetPassword(password) -> {
       let next_user =
-        User(
+        user.User(
           username: model.user.username,
           email: model.user.email,
           password: password,
@@ -35,11 +35,11 @@ pub fn login_update(model: msg.Model, message: msg.Message) {
   }
 }
 
-pub fn register_update(model: msg.Model, message: msg.Message) {
+pub fn register_update(model: msg.Model, message: msg.Message) -> #(msg.Model, effect.Effect(msg.Message)) {
   case message {
     msg.SetUserName(username) -> {
       let next_user =
-        User(
+        user.User(
           username: username,
           email: model.user.email,
           password: model.user.password,
@@ -49,7 +49,7 @@ pub fn register_update(model: msg.Model, message: msg.Message) {
     }
     msg.SetUserEmail(email) -> {
       let next_user =
-        User(
+        user.User(
           username: model.user.username,
           email: email,
           password: model.user.password,
@@ -59,7 +59,7 @@ pub fn register_update(model: msg.Model, message: msg.Message) {
     }
     msg.SetPassword(password) -> {
       let next_user =
-        User(
+        user.User(
           username: model.user.username,
           email: model.user.email,
           password: password,

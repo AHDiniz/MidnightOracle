@@ -1,14 +1,16 @@
 import gleam/http
 import gleam/http/request
 import gleam/json
-import midnight_domain/user.{type User, User}
+import midnight_domain/user
+import lustre/effect
+import messages as msg
 
 pub type AuthError {
   CouldNotLogin
   CouldNotRegister
 }
 
-pub fn login_service(user: User) -> Result(User, AuthError) {
+pub fn login_service(user: user.User) -> Result(msg.ApiLoginResponse(user.User, Int), AuthError) {
   let j =
     json.object([
       #("username", json.string(user.username)),
@@ -30,14 +32,14 @@ pub fn login_service(user: User) -> Result(User, AuthError) {
       Error(CouldNotLogin)
     }
     Ok(data) -> {
-      Ok(user)
+      Ok(msg.ApiLoginResponse(user: user, token: -1))
     }
   }
 
   service_result
 }
 
-pub fn register_service(user: User) -> Result(User, AuthError) {
+pub fn register_service(user: user.User) -> Result(msg.ApiRegisterResponse(user.User, Int), AuthError) {
   let j =
     json.object([
       #("username", json.string(user.username)),
@@ -60,7 +62,7 @@ pub fn register_service(user: User) -> Result(User, AuthError) {
       Error(CouldNotRegister)
     }
     Ok(data) -> {
-      Ok(user)
+      Ok(msg.ApiRegisterResponse(user: user, token: -1))
     }
   }
 

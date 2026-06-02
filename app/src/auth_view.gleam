@@ -4,7 +4,7 @@ import lustre/element/html
 import lustre/event
 import messages as msg
 
-pub fn login_form(model: msg.Model) {
+pub fn login_form(model: msg.Model) -> element.Element(msg.Message) {
   let user = model.user
 
   html.form([], [
@@ -31,7 +31,7 @@ pub fn login_form(model: msg.Model) {
   ])
 }
 
-pub fn register_form(model: msg.Model) {
+pub fn register_form(model: msg.Model) -> element.Element(msg.Message) {
   let user = model.user
 
   html.form([], [
