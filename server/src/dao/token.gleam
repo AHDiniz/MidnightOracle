@@ -1,20 +1,21 @@
 import dao/base.{type DAOResult} as base_dao
 import dao/token/sql
 import dao/user.{type InternalUser}
-import dao/utils
 import gleam/option.{type Option}
 import gleam/result
-import pog
 
 pub type AuthToken {
   AuthToken(user_id: Int, token: BitArray)
 }
 
-pub fn create_update_user_token(
-  token_info: AuthToken,
-) -> Result(BitArray, pog.QueryError) {
-  utils.get_pog_connection()
-  |> sql.create_or_update_token_by_user(token_info.user_id, token_info.token)
+pub fn create_update_user_token(token_info: AuthToken) -> DAOResult(BitArray) {
+  base_dao.run_nil_query(fn(conn) {
+    sql.create_or_update_token_by_user(
+      conn,
+      token_info.user_id,
+      token_info.token,
+    )
+  })
   |> result.replace(token_info.token)
 }
 

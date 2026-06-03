@@ -1,6 +1,7 @@
 //// Basic/Generic definitions for the DAOs
 
-import dao/utils
+import envoy
+import gleam/erlang/process
 import gleam/list
 import gleam/option.{type Option}
 import gleam/result
@@ -38,7 +39,7 @@ pub fn run_get_query(
   query_fn: QueryFn(row_type),
   constructor: fn(row_type) -> domain_type,
 ) -> DAOResult(Option(domain_type)) {
-  utils.get_pog_connection() |> query_fn() |> handle_get_result(constructor)
+  get_pog_connection() |> query_fn() |> handle_get_result(constructor)
 }
 
 fn handle_nil_result(result: PogResult(Nil)) -> DAOResult(Nil) {
@@ -49,7 +50,7 @@ fn handle_nil_result(result: PogResult(Nil)) -> DAOResult(Nil) {
 }
 
 pub fn run_nil_query(query_fn: QueryFn(_)) -> DAOResult(Nil) {
-  utils.get_pog_connection() |> query_fn() |> handle_nil_result()
+  get_pog_connection() |> query_fn() |> handle_nil_result()
 }
 
 fn handle_list_result(
@@ -66,5 +67,17 @@ pub fn run_list_query(
   query_fn: QueryFn(row_type),
   constructor: fn(row_type) -> domain_type,
 ) -> DAOResult(List(domain_type)) {
-  utils.get_pog_connection() |> query_fn() |> handle_list_result(constructor)
+  get_pog_connection() |> query_fn() |> handle_list_result(constructor)
+}
+
+fn get_pog_connection() -> pog.Connection {
+  let db_pool_name = process.new_name("db_pool")
+  let assert Ok(database_url) = envoy.get("DATABASE_URL")
+  let assert Ok(pog_config) = pog.url_config(db_pool_name, database_url)
+  let assert Ok(_) =
+    pog_config
+    |> pog.pool_size(10)
+    |> pog.start
+
+  pog.named_connection(db_pool_name)
 }
