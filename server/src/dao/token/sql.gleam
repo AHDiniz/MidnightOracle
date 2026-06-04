@@ -1,6 +1,6 @@
 //// This module contains the code to run the sql queries defined in
 //// `./src/dao/token/sql`.
-//// > 🐿️ This module was generated automatically using v4.6.0 of
+//// > 🐿️ This module was generated automatically using v4.7.0 of
 //// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ////
 
@@ -10,7 +10,7 @@ import pog
 /// Runs the `create_or_update_token_by_user` query
 /// defined in `./src/dao/token/sql/create_or_update_token_by_user.sql`.
 ///
-/// > 🐿️ This function was generated automatically using v4.6.0 of
+/// > 🐿️ This function was generated automatically using v4.7.0 of
 /// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub fn create_or_update_token_by_user(
@@ -37,7 +37,7 @@ ON CONFLICT (user_id) DO UPDATE
 /// A row you get from running the `get_user_by_token` query
 /// defined in `./src/dao/token/sql/get_user_by_token.sql`.
 ///
-/// > 🐿️ This type definition was generated automatically using v4.6.0 of the
+/// > 🐿️ This type definition was generated automatically using v4.7.0 of the
 /// > [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub type GetUserByTokenRow {
@@ -47,12 +47,12 @@ pub type GetUserByTokenRow {
 /// Runs the `get_user_by_token` query
 /// defined in `./src/dao/token/sql/get_user_by_token.sql`.
 ///
-/// > 🐿️ This function was generated automatically using v4.6.0 of
+/// > 🐿️ This function was generated automatically using v4.7.0 of
 /// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub fn get_user_by_token(
   db: pog.Connection,
-  arg_1: BitArray,
+  token: BitArray,
 ) -> Result(pog.Returned(GetUserByTokenRow), pog.QueryError) {
   let decoder = {
     use user_id <- decode.field(0, decode.int)
@@ -66,7 +66,7 @@ WHERE
   AND expires_at > NOW()
 "
   |> pog.query
-  |> pog.parameter(pog.bytea(arg_1))
+  |> pog.parameter(pog.bytea(token))
   |> pog.returning(decoder)
   |> pog.execute(db)
 }
@@ -74,7 +74,7 @@ WHERE
 /// A row you get from running the `get_valid_token_by_user_id` query
 /// defined in `./src/dao/token/sql/get_valid_token_by_user_id.sql`.
 ///
-/// > 🐿️ This type definition was generated automatically using v4.6.0 of the
+/// > 🐿️ This type definition was generated automatically using v4.7.0 of the
 /// > [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub type GetValidTokenByUserIdRow {
@@ -84,12 +84,12 @@ pub type GetValidTokenByUserIdRow {
 /// Runs the `get_valid_token_by_user_id` query
 /// defined in `./src/dao/token/sql/get_valid_token_by_user_id.sql`.
 ///
-/// > 🐿️ This function was generated automatically using v4.6.0 of
+/// > 🐿️ This function was generated automatically using v4.7.0 of
 /// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub fn get_valid_token_by_user_id(
   db: pog.Connection,
-  arg_1: Int,
+  user_id: Int,
 ) -> Result(pog.Returned(GetValidTokenByUserIdRow), pog.QueryError) {
   let decoder = {
     use token <- decode.field(0, decode.bit_array)
@@ -103,7 +103,7 @@ WHERE
   AND expires_at > NOW()
 "
   |> pog.query
-  |> pog.parameter(pog.int(arg_1))
+  |> pog.parameter(pog.int(user_id))
   |> pog.returning(decoder)
   |> pog.execute(db)
 }

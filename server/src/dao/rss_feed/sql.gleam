@@ -1,6 +1,6 @@
 //// This module contains the code to run the sql queries defined in
 //// `./src/dao/rss_feed/sql`.
-//// > 🐿️ This module was generated automatically using v4.6.0 of
+//// > 🐿️ This module was generated automatically using v4.7.0 of
 //// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ////
 
@@ -10,7 +10,7 @@ import pog
 /// Runs the `create_feed` query
 /// defined in `./src/dao/rss_feed/sql/create_feed.sql`.
 ///
-/// > 🐿️ This function was generated automatically using v4.6.0 of
+/// > 🐿️ This function was generated automatically using v4.7.0 of
 /// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub fn create_feed(
@@ -54,13 +54,13 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 /// Runs the `delete_feed_by_user_and_id` query
 /// defined in `./src/dao/rss_feed/sql/delete_feed_by_user_and_id.sql`.
 ///
-/// > 🐿️ This function was generated automatically using v4.6.0 of
+/// > 🐿️ This function was generated automatically using v4.7.0 of
 /// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub fn delete_feed_by_user_and_id(
   db: pog.Connection,
-  arg_1: Int,
-  arg_2: Int,
+  id: Int,
+  user_id: Int,
 ) -> Result(pog.Returned(Nil), pog.QueryError) {
   let decoder = decode.map(decode.dynamic, fn(_) { Nil })
 
@@ -68,8 +68,8 @@ pub fn delete_feed_by_user_and_id(
 WHERE id = $1 AND user_id = $2
 "
   |> pog.query
-  |> pog.parameter(pog.int(arg_1))
-  |> pog.parameter(pog.int(arg_2))
+  |> pog.parameter(pog.int(id))
+  |> pog.parameter(pog.int(user_id))
   |> pog.returning(decoder)
   |> pog.execute(db)
 }
@@ -77,7 +77,7 @@ WHERE id = $1 AND user_id = $2
 /// A row you get from running the `get_feed_by_user_and_id` query
 /// defined in `./src/dao/rss_feed/sql/get_feed_by_user_and_id.sql`.
 ///
-/// > 🐿️ This type definition was generated automatically using v4.6.0 of the
+/// > 🐿️ This type definition was generated automatically using v4.7.0 of the
 /// > [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub type GetFeedByUserAndIdRow {
@@ -87,13 +87,13 @@ pub type GetFeedByUserAndIdRow {
 /// Runs the `get_feed_by_user_and_id` query
 /// defined in `./src/dao/rss_feed/sql/get_feed_by_user_and_id.sql`.
 ///
-/// > 🐿️ This function was generated automatically using v4.6.0 of
+/// > 🐿️ This function was generated automatically using v4.7.0 of
 /// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub fn get_feed_by_user_and_id(
   db: pog.Connection,
-  arg_1: Int,
-  arg_2: Int,
+  user_id: Int,
+  id: Int,
 ) -> Result(pog.Returned(GetFeedByUserAndIdRow), pog.QueryError) {
   let decoder = {
     use rss_url <- decode.field(0, decode.string)
@@ -105,8 +105,8 @@ FROM rss_feed
 WHERE user_id=$1 AND id=$2
 "
   |> pog.query
-  |> pog.parameter(pog.int(arg_1))
-  |> pog.parameter(pog.int(arg_2))
+  |> pog.parameter(pog.int(user_id))
+  |> pog.parameter(pog.int(id))
   |> pog.returning(decoder)
   |> pog.execute(db)
 }
@@ -114,7 +114,7 @@ WHERE user_id=$1 AND id=$2
 /// A row you get from running the `list_feeds_by_user_id` query
 /// defined in `./src/dao/rss_feed/sql/list_feeds_by_user_id.sql`.
 ///
-/// > 🐿️ This type definition was generated automatically using v4.6.0 of the
+/// > 🐿️ This type definition was generated automatically using v4.7.0 of the
 /// > [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub type ListFeedsByUserIdRow {
@@ -134,12 +134,12 @@ pub type ListFeedsByUserIdRow {
 /// Runs the `list_feeds_by_user_id` query
 /// defined in `./src/dao/rss_feed/sql/list_feeds_by_user_id.sql`.
 ///
-/// > 🐿️ This function was generated automatically using v4.6.0 of
+/// > 🐿️ This function was generated automatically using v4.7.0 of
 /// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub fn list_feeds_by_user_id(
   db: pog.Connection,
-  arg_1: Int,
+  user_id: Int,
 ) -> Result(pog.Returned(ListFeedsByUserIdRow), pog.QueryError) {
   let decoder = {
     use id <- decode.field(0, decode.int)
@@ -178,7 +178,7 @@ FROM rss_feed
 WHERE user_id = $1
 "
   |> pog.query
-  |> pog.parameter(pog.int(arg_1))
+  |> pog.parameter(pog.int(user_id))
   |> pog.returning(decoder)
   |> pog.execute(db)
 }
@@ -186,12 +186,12 @@ WHERE user_id = $1
 /// Runs the `update_feed_by_id` query
 /// defined in `./src/dao/rss_feed/sql/update_feed_by_id.sql`.
 ///
-/// > 🐿️ This function was generated automatically using v4.6.0 of
+/// > 🐿️ This function was generated automatically using v4.7.0 of
 /// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
 ///
 pub fn update_feed_by_id(
   db: pog.Connection,
-  arg_1: Int,
+  id: Int,
   arg_2: Int,
   arg_3: String,
   arg_4: String,
@@ -217,7 +217,7 @@ SET (
 WHERE id = $1
 "
   |> pog.query
-  |> pog.parameter(pog.int(arg_1))
+  |> pog.parameter(pog.int(id))
   |> pog.parameter(pog.int(arg_2))
   |> pog.parameter(pog.text(arg_3))
   |> pog.parameter(pog.text(arg_4))

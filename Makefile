@@ -18,3 +18,6 @@ server: domain
 
 run_server: server
 	docker compose up -d db server
+
+run_squirrel:
+	docker compose up -d db squirrel
