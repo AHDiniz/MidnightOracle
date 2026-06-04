@@ -11,16 +11,33 @@ import wisp.{type Request, type Response}
 
 pub fn router(req: Request, path: List(String)) -> Response {
   case path {
-    ["create"] -> create_feed(req)
-    ["list"] -> list_feeds(req)
-    ["update"] -> update_feed(req)
-    ["delete", id] -> delete_feed(req, id)
-    _ -> wisp.not_found()
+    [] -> namespace_routes(req)
+    [head, ..tail] -> {
+      case int.parse(head), tail {
+        Ok(id), [] -> id_routes(req, id)
+        _, _ -> wisp.not_found()
+      }
+    }
+  }
+}
+
+fn namespace_routes(req: Request) -> Response {
+  case req.method {
+    http.Get -> list_feeds(req)
+    http.Post -> create_feed(req)
+    _ -> wisp.method_not_allowed([http.Get, http.Post])
+  }
+}
+
+fn id_routes(req: Request, id: Int) -> Response {
+  case req.method {
+    http.Patch -> update_feed(req, id)
+    http.Delete -> delete_feed(req, id)
+    _ -> wisp.method_not_allowed([http.Patch, http.Delete])
   }
 }
 
 fn create_feed(req: Request) -> Response {
-  use <- wisp.require_method(req, http.Post)
   use user_id <- auth.require_auth(req)
 
   let decoder = {
@@ -37,7 +54,6 @@ fn create_feed(req: Request) -> Response {
 }
 
 fn list_feeds(req: Request) -> Response {
-  use <- wisp.require_method(req, http.Get)
   use user_id <- auth.require_auth(req)
 
   let res = service.get_feeds_from_user(user_id)
@@ -50,16 +66,8 @@ fn list_feeds(req: Request) -> Response {
   |> wisp.json_response(200)
 }
 
-pub fn update_feed(req: Request) -> Response {
-  use <- wisp.require_method(req, http.Post)
+pub fn update_feed(req: Request, feed_id: Int) -> Response {
   use user_id <- auth.require_auth(req)
-
-  let decoder = {
-    use feed_id <- decode.field("feed_id", decode.int)
-    decode.success(feed_id)
-  }
-  use decoded <- utils.decode_json_body(req, decoder)
-  use feed_id <- errors.try_response(decoded)
 
   let update_res = service.update_feed_from_user(user_id, feed_id)
   use _ <- errors.try_response(update_res)
@@ -67,14 +75,11 @@ pub fn update_feed(req: Request) -> Response {
   wisp.json_response("{}", 200)
 }
 
-pub fn delete_feed(req: Request, id: String) -> Response {
-  use <- wisp.require_method(req, http.Delete)
+pub fn delete_feed(req: Request, feed_id: Int) -> Response {
   use user_id <- auth.require_auth(req)
-
-  use feed_id <- errors.try_response(int.parse(id) |> errors.to_bad_request())
 
   let delete_res = service.delete_feed_from_user(user_id, feed_id)
   use _ <- errors.try_response(delete_res)
 
-  wisp.no_content()
+  wisp.json_response("{}", 200)
 }

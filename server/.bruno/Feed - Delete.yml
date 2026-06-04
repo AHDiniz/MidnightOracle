@@ -5,13 +5,7 @@ info:
 
 http:
   method: DELETE
-  url: http://127.0.0.1:8910/feed/delete/1/
-  body:
-    type: json
-    data: |-
-      {
-        "feed_id": 1
-      }
+  url: http://127.0.0.1:8910/feed/9
   auth: inherit
 
 settings:
