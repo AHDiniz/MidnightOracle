@@ -1,4 +1,5 @@
 import apps/auth
+import apps/feed/rss_item
 import apps/feed/service
 import apps/utils
 import apps/utils/errors
@@ -15,6 +16,7 @@ pub fn router(req: Request, path: List(String)) -> Response {
     [head, ..tail] -> {
       case int.parse(head), tail {
         Ok(id), [] -> id_routes(req, id)
+        Ok(id), ["item", ..path] -> rss_item.router(req, id, path)
         _, _ -> wisp.not_found()
       }
     }

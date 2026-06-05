@@ -71,11 +71,8 @@ fn build_feed_from_channel_content(
   input: Input,
   rss_builder: RssFeedBuilder,
 ) -> Result(RssFeedBuilder, _) {
-  let eoi =
-    xmlm.eoi(input)
-    |> result.map(fn(x) { x.0 })
-    |> result.unwrap(or: False)
-  use <- bool.guard(when: eoi, return: Ok(rss_builder))
+  let end = utils.eoi_or_error(input)
+  use <- bool.guard(when: end, return: Ok(rss_builder))
 
   use #(signal, new_input) <- utils.try_signal(input)
 

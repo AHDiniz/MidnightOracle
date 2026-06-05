@@ -5,7 +5,7 @@ info:
 
 http:
   method: PATCH
-  url: http://127.0.0.1:8910/feed/9/
+  url: http://127.0.0.1:8910/feed/11/
   auth: inherit
 
 settings:

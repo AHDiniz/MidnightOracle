@@ -51,3 +51,10 @@ pub fn skip_until_element_end(input: Input) -> Result(Input, _) {
     Error(x) -> Error(xmlm.input_error_to_string(x))
   }
 }
+
+/// Checa se a input do XML chegou ao fim ou se continuar a leitura gera erro
+pub fn eoi_or_error(input: Input) -> Bool {
+  xmlm.eoi(input)
+  |> result.map(fn(x) { x.0 })
+  |> result.unwrap(or: True)
+}
