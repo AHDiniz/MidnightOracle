@@ -66,7 +66,7 @@ fn list_feeds(req: Request) -> Response {
   |> wisp.json_response(200)
 }
 
-pub fn update_feed(req: Request, feed_id: Int) -> Response {
+fn update_feed(req: Request, feed_id: Int) -> Response {
   use user_id <- auth.require_auth(req)
 
   let update_res = service.update_feed_from_user(user_id, feed_id)
@@ -75,7 +75,7 @@ pub fn update_feed(req: Request, feed_id: Int) -> Response {
   wisp.json_response("{}", 200)
 }
 
-pub fn delete_feed(req: Request, feed_id: Int) -> Response {
+fn delete_feed(req: Request, feed_id: Int) -> Response {
   use user_id <- auth.require_auth(req)
 
   let delete_res = service.delete_feed_from_user(user_id, feed_id)
