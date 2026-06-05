@@ -1,13 +1,14 @@
+import apps/feed/xml/utils
 import gleam/bool
 import gleam/result
-import xmlm.{type Input, Data, Dtd, ElementEnd, ElementStart, Name, Tag}
+import xmlm.{type Input, Data, Dtd, ElementEnd, ElementStart}
 
 pub fn get_feed_fields(xml_string: String) -> Result(RssFeedFields, String) {
   let xml_input = xmlm.from_string(xml_string)
 
-  use input <- result.try(consume_dtd(xml_input))
-  use input <- result.try(consume_data_until_element(input, "rss"))
-  use input <- result.try(consume_data_until_element(input, "channel"))
+  use input <- result.try(utils.consume_dtd(xml_input))
+  use input <- result.try(utils.consume_data_until_element(input, "rss"))
+  use input <- result.try(utils.consume_data_until_element(input, "channel"))
 
   use builder <- result.try(build_feed_from_channel_content(
     input,
@@ -76,7 +77,7 @@ fn build_feed_from_channel_content(
     |> result.unwrap(or: False)
   use <- bool.guard(when: eoi, return: Ok(rss_builder))
 
-  use #(signal, new_input) <- try_signal(input)
+  use #(signal, new_input) <- utils.try_signal(input)
 
   case signal {
     Data(_) | Dtd(_) | ElementEnd ->
@@ -86,7 +87,7 @@ fn build_feed_from_channel_content(
       case tag.name.local {
         // Processar os elementos que nos importam
         "link" | "title" | "description" | "pubDate" | "lastBuildDate" -> {
-          use #(signal, new_input) <- try_signal(new_input)
+          use #(signal, new_input) <- utils.try_signal(new_input)
 
           case signal {
             Data(value) -> {
@@ -99,7 +100,7 @@ fn build_feed_from_channel_content(
         }
         // Skippar os elementos que não importam
         _ -> {
-          use new_input <- result.try(skip_until_element_end(new_input))
+          use new_input <- result.try(utils.skip_until_element_end(new_input))
           build_feed_from_channel_content(new_input, rss_builder)
         }
       }
@@ -119,56 +120,5 @@ fn update_builder_field(
     "pubDate" -> RssFeedBuilder(..builder, pub_date: val)
     "lastBuildDate" -> RssFeedBuilder(..builder, last_build: val)
     _ -> builder
-  }
-}
-
-// Utilitários genéricos para a xmlm
-
-/// Utilitário para evitar a repetição de
-/// ```gleam
-/// result.try(xmlm.signal(input) |> result.map_error(xmlm.input_error_to_string))
-/// ```
-fn try_signal(input: Input, callback: fn(_) -> _) {
-  use x <- result.try(
-    xmlm.signal(input) |> result.map_error(xmlm.input_error_to_string),
-  )
-  callback(x)
-}
-
-/// Pula o DTD do XML. Geralmente é encontrado apenas no início
-fn consume_dtd(input: Input) -> Result(Input, _) {
-  case xmlm.signal(input) {
-    Ok(#(Dtd(_), input)) -> Ok(input)
-    _ -> Error("DTD não encontrado")
-  }
-}
-
-/// Consome `Data`s até consumir um ElementStart com a tag esperada
-fn consume_data_until_element(
-  input: Input,
-  tag_name: String,
-) -> Result(Input, _) {
-  case xmlm.signal(input) {
-    Ok(#(ElementStart(Tag(Name(_, name), _)), new_input)) if tag_name == name ->
-      Ok(new_input)
-    Ok(#(Data(_), new_input)) -> consume_data_until_element(new_input, tag_name)
-    _ -> Error("Erro consumindo elemento")
-  }
-}
-
-/// Pula elementos até encontrar um ElementEnd.
-/// 
-/// Também pula aninhadamente ElementEnd's para cada
-/// ElementStart encontrado no meio do caminho
-fn skip_until_element_end(input: Input) -> Result(Input, _) {
-  case xmlm.signal(input) {
-    Ok(#(ElementEnd, input)) -> Ok(input)
-
-    Ok(#(ElementStart(_), input)) ->
-      skip_until_element_end(input)
-      |> result.try(skip_until_element_end)
-
-    Ok(#(_, input)) -> skip_until_element_end(input)
-    Error(x) -> Error(xmlm.input_error_to_string(x))
   }
 }

@@ -5,7 +5,7 @@ import gleam/http/request
 import gleam/httpc
 import gleam/result
 
-pub fn get_request(url: String) -> ServerResult(_) {
+fn get_request(url: String) -> ServerResult(_) {
   use req <- result.try(request.to(url) |> errors.to_internal_error())
   let req = request.set_method(req, http.Get)
 
