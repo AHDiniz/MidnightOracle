@@ -1,6 +1,15 @@
+import apps/feed/utils
+import apps/feed/xml/item as xml
 import apps/utils/errors.{type ServerResult}
 import dao/rss_item as item_dao
+import gleam/result
 import midnight_domain/rss_item.{type RssItem}
+
+pub fn read_feed_items_from_url(rss_url: String) -> ServerResult(List(_)) {
+  use rss_response <- result.try(utils.get_request(rss_url))
+
+  xml.get_feed_items(rss_response.body) |> errors.to_bad_request()
+}
 
 /// Recebe o ID do usuário, para garantir que o feed pertence ao usuário
 pub fn list_feed_saved_items(

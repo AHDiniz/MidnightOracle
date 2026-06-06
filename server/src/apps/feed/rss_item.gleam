@@ -1,8 +1,6 @@
 import apps/auth
 import apps/feed/rss_item/service as item_service
 import apps/feed/service as feed_service
-import apps/feed/utils
-import apps/feed/xml/item as xml_item
 import apps/utils as json_utils
 import apps/utils/errors
 import gleam/http
@@ -36,11 +34,10 @@ fn list_items(req: Request, feed_id: Int) -> Response {
   use user_id <- auth.require_auth(req)
 
   use rss_url <- errors.try_response(feed_service.get_feed_url(user_id, feed_id))
-  use rss_response <- errors.try_response(utils.get_request(rss_url))
 
-  use items <- errors.try_response(
-    xml_item.get_feed_items(rss_response.body) |> errors.to_bad_request(),
-  )
+  use items <- errors.try_response(item_service.read_feed_items_from_url(
+    rss_url,
+  ))
 
   items
   |> list.map(fn(fields) {
