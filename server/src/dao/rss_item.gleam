@@ -32,3 +32,12 @@ pub fn create_rss_item(
     sql.create_item(conn, feed_id, title, link, description, enclosure_url)
   })
 }
+
+pub fn delete_rss_item_by_id_and_feed_id(
+  id: Int,
+  feed_id: Int,
+) -> DAOResult(Nil) {
+  base_dao.run_nil_query(fn(conn) {
+    sql.delete_item_by_id_and_feed(conn, id, feed_id)
+  })
+}

@@ -26,11 +26,11 @@
   - [x] Listar Feeds
   - [x] Atualizar info de Feeds
   - [x] Deletar Feeds
-- [ ] Itens de feed RSS
+- [x] Itens de feed RSS
   - [x] Listar Itens a partir do XML
   - [x] Listar Itens salvos
-  - [ ] Salvar Itens
-  - [ ] Deletar Itens
+  - [x] Salvar Itens
+  - [x] Deletar Itens
 - [ ] Categorias
   - [ ] Criar novas
   - [ ] Atrelar a Feeds

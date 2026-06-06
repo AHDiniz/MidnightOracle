@@ -5,6 +5,7 @@ import apps/utils as json_utils
 import apps/utils/errors
 import gleam/dynamic/decode
 import gleam/http
+import gleam/int
 import gleam/json
 import gleam/list
 import midnight_domain/rss_item
@@ -26,6 +27,15 @@ pub fn router(req: Request, feed_id: Int, path: List(String)) -> Response {
         http.Get -> list_saved_items(req, feed_id)
         http.Post -> save_feed_item(req, feed_id)
         _ -> wisp.method_not_allowed([http.Get, http.Post])
+      }
+    }
+    ["saved", id] -> {
+      case int.parse(id) {
+        Ok(id) -> {
+          use <- wisp.require_method(req, http.Delete)
+          delete_saved_item(req, feed_id, id)
+        }
+        _ -> wisp.not_found()
       }
     }
     _ -> wisp.not_found()
@@ -91,4 +101,16 @@ fn save_feed_item(req: Request, feed_id: Int) -> Response {
     enclosure_url,
   ))
   wisp.json_response("{}", 201)
+}
+
+fn delete_saved_item(req: Request, feed_id: Int, item_id: Int) -> Response {
+  use user_id <- auth.require_auth(req)
+
+  use _ <- errors.try_response(item_service.delete_saved_item(
+    user_id,
+    feed_id,
+    item_id,
+  ))
+
+  wisp.no_content()
 }

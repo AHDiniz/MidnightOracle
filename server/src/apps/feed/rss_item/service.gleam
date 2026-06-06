@@ -35,3 +35,14 @@ pub fn save_feed_item(
   item_dao.create_rss_item(feed_id, title, link, description, enclosure_url)
   |> errors.to_internal_error()
 }
+
+pub fn delete_saved_item(
+  user_id: Int,
+  feed_id: Int,
+  item_id: Int,
+) -> ServerResult(Nil) {
+  use _ <- result.try(feed_service.get_feed_url(user_id, feed_id))
+
+  item_dao.delete_rss_item_by_id_and_feed_id(item_id, feed_id)
+  |> errors.to_internal_error()
+}
