@@ -19,5 +19,8 @@ server: domain
 run_server: server
 	docker compose up -d db server
 
-run_squirrel:
+run_cigogne: server
+	docker compose up -d db cigogne
+
+run_squirrel: server
 	docker compose up -d db squirrel

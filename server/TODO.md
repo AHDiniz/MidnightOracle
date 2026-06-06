@@ -7,10 +7,10 @@
   `auth/register`, e eles se autenticam via a rota `auth/login`.
     - Um exemplo de rota que exige autenticação (e que o conteúdo varia por usuário)
     é a rota `auth/me`.
-- [ ] Lista 2 - Funcionalidades CRUD
+- [x] Lista 2 - Funcionalidades CRUD
   - Eu argumentaria que já temos um exemplo de funcionalidade CRUD com
   a criação de usuários, apesar de ela estar limitada à Create e Read.
-- [ ] Lista 3 - Funcionalidades não-CRUD
+- [x] Lista 3 - Funcionalidades não-CRUD
   - Eu acho que a funcionalidade de ler o conteúdo dos feeds RSS a partir do XML já conta
 - [ ] Lista 4 - Autorização
   - Não estava previsto no trabalho inicial, podemos adicionar o conceito de Admin,
@@ -21,13 +21,14 @@
 - [x] Usuários
   - [x] Registrar
   - [x] Logar
-- [ ] Feeds RSS
+- [x] Feeds RSS
   - [x] Registrar Feeds
   - [x] Listar Feeds
   - [x] Atualizar info de Feeds
-  - [ ] Deletar Feeds
+  - [x] Deletar Feeds
 - [ ] Itens de feed RSS
-  - [ ] Listar Itens salvos
+  - [x] Listar Itens a partir do XML
+  - [x] Listar Itens salvos
   - [ ] Salvar Itens
   - [ ] Deletar Itens
 - [ ] Categorias

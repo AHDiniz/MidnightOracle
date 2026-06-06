@@ -29,10 +29,11 @@ pub fn get_feed_url(user_id: Int, feed_id: Int) -> ServerResult(String) {
 }
 
 pub fn get_feeds_from_user(user_id: Int) -> ServerResult(List(RssFeed)) {
-  feed_dao.list_rss_feed_by_user_id(user_id) |> errors.to_internal_error
+  feed_dao.list_rss_feed_by_user_id(user_id)
+  |> errors.to_internal_error()
 }
 
-pub fn update_feed_from_user(user_id: Int, feed_id: Int) -> ServerResult(_) {
+pub fn update_feed_from_user(user_id: Int, feed_id: Int) -> ServerResult(Nil) {
   use rss_url <- result.try(get_feed_url(user_id, feed_id))
   use fields <- result.try(utils.get_rss_fields_from_url(rss_url))
 
@@ -50,6 +51,7 @@ pub fn update_feed_from_user(user_id: Int, feed_id: Int) -> ServerResult(_) {
   |> errors.to_internal_error()
 }
 
-pub fn delete_feed_from_user(user_id: Int, feed_id: Int) -> ServerResult(_) {
-  feed_dao.delete_rss_feed_by_id(feed_id, user_id) |> errors.to_internal_error
+pub fn delete_feed_from_user(user_id: Int, feed_id: Int) -> ServerResult(Nil) {
+  feed_dao.delete_rss_feed_by_id(feed_id, user_id)
+  |> errors.to_internal_error()
 }
