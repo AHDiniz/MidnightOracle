@@ -7,6 +7,41 @@
 import gleam/dynamic/decode
 import pog
 
+/// Runs the `create_item` query
+/// defined in `./src/dao/rss_item/sql/create_item.sql`.
+///
+/// > 🐿️ This function was generated automatically using v4.7.0 of
+/// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
+///
+pub fn create_item(
+  db: pog.Connection,
+  arg_1: Int,
+  arg_2: String,
+  arg_3: String,
+  arg_4: String,
+  arg_5: String,
+) -> Result(pog.Returned(Nil), pog.QueryError) {
+  let decoder = decode.map(decode.dynamic, fn(_) { Nil })
+
+  "INSERT INTO rss_item(
+  feed_id,
+  title,
+  link,
+  description,
+  enclosure_url
+)
+VALUES ($1, $2, $3, $4, $5)
+"
+  |> pog.query
+  |> pog.parameter(pog.int(arg_1))
+  |> pog.parameter(pog.text(arg_2))
+  |> pog.parameter(pog.text(arg_3))
+  |> pog.parameter(pog.text(arg_4))
+  |> pog.parameter(pog.text(arg_5))
+  |> pog.returning(decoder)
+  |> pog.execute(db)
+}
+
 /// A row you get from running the `list_items_by_feed_and_user` query
 /// defined in `./src/dao/rss_item/sql/list_items_by_feed_and_user.sql`.
 ///

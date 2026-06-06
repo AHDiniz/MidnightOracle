@@ -35,13 +35,9 @@ fn authenticate(req: Request) -> Response {
     decode.success(#(username, password))
   }
   use decoded <- utils.decode_json_body(req, body_decoder)
+  use #(username, password) <- errors.try_response(decoded)
 
-  let auth_result = {
-    use #(username, password) <- result.try(decoded)
-    service.authenticate_user(username, password)
-  }
-
-  use token <- errors.try_response(auth_result)
+  use token <- errors.try_response(service.authenticate_user(username, password))
 
   [#("bearer_token", json.string(token))]
   |> utils.fast_json_response(200)
@@ -93,8 +89,5 @@ pub fn require_auth(
     token.get_user_by_token(token_bit)
   }
 
-  case res {
-    Ok(id) -> next(id)
-    Error(x) -> errors.error_response(x)
-  }
+  errors.try_response(res, next)
 }

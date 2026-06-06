@@ -1,0 +1,24 @@
+info:
+  name: Feed - Itens - Save
+  type: http
+  seq: 10
+
+http:
+  method: POST
+  url: http://127.0.0.1:8910/feed/11/item/saved
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Titulo",
+        "link": "link.com",
+        "description": "Descrição",
+        "enclosure_url": ""
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

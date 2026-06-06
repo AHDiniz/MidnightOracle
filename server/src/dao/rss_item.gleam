@@ -20,3 +20,15 @@ pub fn list_rss_items_by_user_and_feed(
     },
   )
 }
+
+pub fn create_rss_item(
+  feed_id: Int,
+  title: String,
+  link: String,
+  description: String,
+  enclosure_url: String,
+) -> DAOResult(Nil) {
+  base_dao.run_nil_query(fn(conn) {
+    sql.create_item(conn, feed_id, title, link, description, enclosure_url)
+  })
+}
