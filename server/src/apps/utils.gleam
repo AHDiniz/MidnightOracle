@@ -1,4 +1,4 @@
-import apps/utils/errors.{type ServerError}
+import apps/utils/errors
 import gleam/dynamic/decode
 import gleam/json.{type Json}
 import gleam/string_tree
@@ -7,13 +7,14 @@ import wisp.{type Request, type Response}
 pub fn decode_json_body(
   request: Request,
   decoder: decode.Decoder(a),
-  next: fn(Result(a, ServerError)) -> Response,
+  next: fn(a) -> Response,
 ) {
   use body <- wisp.require_json(request)
   let decoded =
     decode.run(body, decoder)
     |> errors.to_bad_request()
-  next(decoded)
+
+  errors.try_response(decoded, next)
 }
 
 pub fn fast_to_string(json: Json) -> String {

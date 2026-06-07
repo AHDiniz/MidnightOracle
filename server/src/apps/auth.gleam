@@ -13,17 +13,11 @@ import wisp.{type Request, type Response}
 
 fn register(req: Request) -> Response {
   use <- wisp.require_method(req, http.Post)
-  use decoded <- utils.decode_json_body(req, user.decoder())
+  use user <- utils.decode_json_body(req, user.decoder())
 
-  let res = {
-    use user <- result.try(decoded)
-    service.persist_user(user)
-  }
+  use _ <- errors.try_response(service.persist_user(user))
 
-  case res {
-    Ok(_) -> wisp.json_response("{}", 201)
-    Error(err) -> errors.error_response(err)
-  }
+  wisp.json_response("{}", 201)
 }
 
 fn authenticate(req: Request) -> Response {
@@ -34,8 +28,7 @@ fn authenticate(req: Request) -> Response {
     use password <- decode.field("password", decode.string)
     decode.success(#(username, password))
   }
-  use decoded <- utils.decode_json_body(req, body_decoder)
-  use #(username, password) <- errors.try_response(decoded)
+  use #(username, password) <- utils.decode_json_body(req, body_decoder)
 
   use token <- errors.try_response(service.authenticate_user(username, password))
 

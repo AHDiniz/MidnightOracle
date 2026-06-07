@@ -39,8 +39,7 @@ fn create_category(req: Request) -> Response {
     use name <- decode.field("name", decode.string)
     decode.success(name)
   }
-  use decoded <- utils.decode_json_body(req, decoder)
-  use name <- errors.try_response(decoded)
+  use name <- utils.decode_json_body(req, decoder)
 
   use _ <- errors.try_response(service.create_category(user_id, name))
   wisp.json_response("{}", 200)

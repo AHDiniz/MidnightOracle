@@ -46,8 +46,7 @@ fn create_feed(req: Request) -> Response {
     use feed_url <- decode.field("feed_url", decode.string)
     decode.success(feed_url)
   }
-  use decoded <- utils.decode_json_body(req, decoder)
-  use feed_url <- errors.try_response(decoded)
+  use feed_url <- utils.decode_json_body(req, decoder)
 
   let create_res = service.create_feed_from_url(feed_url, user_id)
   use _ <- errors.try_response(create_res)

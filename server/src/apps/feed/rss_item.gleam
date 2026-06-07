@@ -89,8 +89,10 @@ fn save_feed_item(req: Request, feed_id: Int) -> Response {
 
     decode.success(#(title, link, description, enclosure_url))
   }
-  use decoded <- json_utils.decode_json_body(req, decoder)
-  use #(title, link, description, enclosure_url) <- errors.try_response(decoded)
+  use #(title, link, description, enclosure_url) <- json_utils.decode_json_body(
+    req,
+    decoder,
+  )
 
   use _ <- errors.try_response(item_service.save_feed_item(
     user_id,
