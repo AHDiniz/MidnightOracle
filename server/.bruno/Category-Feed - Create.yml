@@ -1,16 +1,16 @@
 info:
-  name: Category - Create
+  name: Category/Feed - Create
   type: http
-  seq: 13
+  seq: 15
 
 http:
   method: POST
-  url: http://127.0.0.1:8910/category
+  url: http://127.0.0.1:8910/category/feed/2
   body:
     type: json
     data: |-
       {
-        "name": "Anime"
+        "category_id": 2
       }
   auth: inherit
 

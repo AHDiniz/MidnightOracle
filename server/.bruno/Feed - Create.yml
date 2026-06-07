@@ -10,8 +10,8 @@ http:
     type: json
     data: |-
       {
-      //  "feed_url": "https://nyaa.si/?page=rss&c=0_0&f=2"
-        "feed_url": "https://www.rssboard.org/files/sample-rss-2.xml"
+        "feed_url": "https://nyaa.si/?page=rss&c=0_0&f=2"
+      //  "feed_url": "https://www.rssboard.org/files/sample-rss-2.xml"
       }
   auth: inherit
 

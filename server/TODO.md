@@ -34,7 +34,8 @@
 - [ ] Categorias
   - [x] Listar
   - [x] Criar novas
-  - [ ] Atrelar a Feeds
+  - [ ] Deletar
+  - [x] Atrelar a Feeds
     - [ ] Desatrelar
   - [ ] Atrelar a Itens
     - [ ] Desatrelar
