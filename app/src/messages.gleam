@@ -1,4 +1,6 @@
+import gleam/http/response
 import midnight_domain/user
+import rsvp
 
 pub type Page {
   Login
@@ -7,7 +9,7 @@ pub type Page {
 }
 
 pub type Model {
-  Model(user: user.User, token: Int, current_page: Page)
+  Model(user: user.User, token: String, current_page: Page)
 }
 
 pub type Message {
@@ -17,6 +19,12 @@ pub type Message {
   UserLogin
   UserRegister
   GoToPage(page: Page)
-  ApiLoginResponse(user: user.User, token: Int)
-  ApiRegisterResponse(user: user.User, token: Int)
+  ApiLoginRequest(result: Result(String, rsvp.Error(String)))
+  ApiRegisterRequest(
+    result: Result(response.Response(String), rsvp.Error(String)),
+  )
+}
+
+pub fn error_dispatch(dispatch) {
+  dispatch(GoToPage(Error))
 }

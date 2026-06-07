@@ -1,70 +1,39 @@
-import gleam/http
-import gleam/http/request
+import gleam/dynamic/decode
 import gleam/json
-import midnight_domain/user
 import lustre/effect
 import messages as msg
+import midnight_domain/user
+import rsvp
 
 pub type AuthError {
   CouldNotLogin
   CouldNotRegister
 }
 
-pub fn login_service(user: user.User) -> Result(msg.ApiLoginResponse(user.User, Int), AuthError) {
-  let j =
+pub fn login_service(user: user.User) -> effect.Effect(msg.Message) {
+  let url = "http://localhost:8910/auth/login"
+  let body =
     json.object([
       #("username", json.string(user.username)),
       #("password", json.string(user.password)),
     ])
-
-  let r =
-    request.new()
-    |> request.set_host("localhost")
-    |> request.set_port(8910)
-    |> request.set_method(http.Post)
-    |> request.set_path("auth/login")
-    |> request.set_body(json.to_string(j))
-
-  let request_result = request.get_query(r)
-
-  let service_result = case request_result {
-    Error(Nil) -> {
-      Error(CouldNotLogin)
-    }
-    Ok(data) -> {
-      Ok(msg.ApiLoginResponse(user: user, token: -1))
-    }
-  }
-
-  service_result
+  let handler = rsvp.expect_json(token_decoder(), msg.ApiLoginRequest)
+  rsvp.post(url, body, handler)
 }
 
-pub fn register_service(user: user.User) -> Result(msg.ApiRegisterResponse(user.User, Int), AuthError) {
-  let j =
+pub fn register_service(user: user.User) -> effect.Effect(msg.Message) {
+  let url = "http://localhost:8910/auth/register"
+  let body =
     json.object([
       #("username", json.string(user.username)),
       #("password", json.string(user.password)),
       #("email", json.string(user.email)),
     ])
+  let handler = rsvp.expect_ok_response(msg.ApiRegisterRequest)
+  rsvp.post(url, body, handler)
+}
 
-  let r =
-    request.new()
-    |> request.set_host("localhost")
-    |> request.set_port(8910)
-    |> request.set_method(http.Post)
-    |> request.set_path("auth/register")
-    |> request.set_body(json.to_string(j))
-
-  let request_result = request.get_query(r)
-
-  let service_result = case request_result {
-    Error(Nil) -> {
-      Error(CouldNotRegister)
-    }
-    Ok(data) -> {
-      Ok(msg.ApiRegisterResponse(user: user, token: -1))
-    }
-  }
-
-  service_result
+fn token_decoder() {
+  use token <- decode.field("bearer_token", decode.string)
+  decode.success(token)
 }
