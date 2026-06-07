@@ -1,7 +1,7 @@
 --- migration:up
 CREATE TABLE rss_item(
     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    feed_id INT REFERENCES rss_feed NOT NULL,
+    feed_id INT REFERENCES rss_feed ON DELETE CASCADE NOT NULL,
 
     title TEXT NOT NULL,
     link TEXT NOT NULL,

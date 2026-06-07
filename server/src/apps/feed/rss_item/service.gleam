@@ -41,6 +41,7 @@ pub fn delete_saved_item(
   feed_id: Int,
   item_id: Int,
 ) -> ServerResult(Nil) {
+  // Checar se o usuário é dono do feed
   use _ <- result.try(feed_service.get_feed_url(user_id, feed_id))
 
   item_dao.delete_rss_item_by_id_and_feed_id(item_id, feed_id)
