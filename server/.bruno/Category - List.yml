@@ -1,11 +1,11 @@
 info:
-  name: Feed - Itens - Delete
+  name: Category - List
   type: http
-  seq: 11
+  seq: 12
 
 http:
-  method: DELETE
-  url: http://127.0.0.1:8910/feed/1/item/saved/2
+  method: GET
+  url: http://127.0.0.1:8910/category
   auth: inherit
 
 settings:

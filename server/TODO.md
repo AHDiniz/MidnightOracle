@@ -32,7 +32,8 @@
   - [x] Salvar Itens
   - [x] Deletar Itens
 - [ ] Categorias
-  - [ ] Criar novas
+  - [x] Listar
+  - [x] Criar novas
   - [ ] Atrelar a Feeds
     - [ ] Desatrelar
   - [ ] Atrelar a Itens
