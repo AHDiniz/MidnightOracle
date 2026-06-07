@@ -89,3 +89,7 @@ pub fn delete_rss_feed_by_id(rss_feed_id: Int, user_id: Int) -> DAOResult(Nil) {
     sql.delete_feed_by_user_and_id(conn, rss_feed_id, user_id)
   })
 }
+
+pub fn check_user_owns_feed(user_id: Int, feed_id: Int) -> DAOResult(Bool) {
+  todo
+}

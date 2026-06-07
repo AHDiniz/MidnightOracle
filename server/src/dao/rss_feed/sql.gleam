@@ -7,6 +7,45 @@
 import gleam/dynamic/decode
 import pog
 
+/// A row you get from running the `check_user_owns_feed` query
+/// defined in `./src/dao/rss_feed/sql/check_user_owns_feed.sql`.
+///
+/// > 🐿️ This type definition was generated automatically using v4.7.0 of the
+/// > [squirrel package](https://github.com/giacomocavalieri/squirrel).
+///
+pub type CheckUserOwnsFeedRow {
+  CheckUserOwnsFeedRow(exists: Bool)
+}
+
+/// Runs the `check_user_owns_feed` query
+/// defined in `./src/dao/rss_feed/sql/check_user_owns_feed.sql`.
+///
+/// > 🐿️ This function was generated automatically using v4.7.0 of
+/// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
+///
+pub fn check_user_owns_feed(
+  db: pog.Connection,
+  user_id: Int,
+  rss_feed_id: Int,
+) -> Result(pog.Returned(CheckUserOwnsFeedRow), pog.QueryError) {
+  let decoder = {
+    use exists <- decode.field(0, decode.bool)
+    decode.success(CheckUserOwnsFeedRow(exists:))
+  }
+
+  "SELECT EXISTS (
+  SELECT 1
+  FROM rss_feed
+  WHERE user_id = $1 AND rss_feed.id = $2
+)
+"
+  |> pog.query
+  |> pog.parameter(pog.int(user_id))
+  |> pog.parameter(pog.int(rss_feed_id))
+  |> pog.returning(decoder)
+  |> pog.execute(db)
+}
+
 /// Runs the `create_feed` query
 /// defined in `./src/dao/rss_feed/sql/create_feed.sql`.
 ///
