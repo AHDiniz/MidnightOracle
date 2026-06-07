@@ -107,3 +107,38 @@ A funcionalidade do endpoint depende do método HTTP:
 
 * Método PATCH: Atualiza os metadados do feed passado (título, descrição, etc)
 * Método DELETE: Remove o feed RSS da lista de feeds do usuário
+
+### Items
+
+Endpoints relacionado ao manejamento dos items do feeds.
+
+Esses endpoints estão dentro do namespace dos endpoints de Feed específico `/feed/{id}`,
+mas estão documentados separadamente para facilitar a leitura desse documento
+
+Todos os endpoints requerem autenticação, e operam apenas nos items dos feeds do usuário autenticado.
+
+#### `/feed/{id}/item`
+
+Lista os items do feed específicado, puxando direto do XML de origem
+
+* Método GET
+* Retorna um body com o formato:
+
+```ts
+{
+
+}
+```
+
+#### `/feed/{id}/item/saved`
+
+Endpoint para operações em cima dos itens SALVOS para o feed passado.
+
+* Método GET: Lista os itens salvos existentes
+* Método POST: Manda um item novo para ser salvo em BD
+
+#### `/feed/{feed_id}/item/saved/{item_id}`
+
+Endpoint para operações em cima de um item salvo específico do feed passado.
+
+* Método DELETE: Remove o item salvo do banco de dados
