@@ -18,7 +18,16 @@ pub fn router(req: Request, path: List(String)) -> Response {
         _ -> wisp.method_not_allowed([http.Get, http.Post])
       }
     }
-    ["feed", id] ->
+    [id] -> {
+      case int.parse(id) {
+        Ok(category_id) -> {
+          use <- wisp.require_method(req, http.Delete)
+          delete_category(req, category_id)
+        }
+        _ -> wisp.not_found()
+      }
+    }
+    ["feed", id] -> {
       case int.parse(id) {
         Ok(feed_id) ->
           case req.method {
@@ -28,6 +37,7 @@ pub fn router(req: Request, path: List(String)) -> Response {
           }
         Error(_) -> wisp.not_found()
       }
+    }
     _ -> wisp.not_found()
   }
 }
@@ -54,6 +64,14 @@ fn create_category(req: Request) -> Response {
 
   use _ <- errors.try_response(service.create_category(user_id, name))
   wisp.json_response("{}", 200)
+}
+
+fn delete_category(req: Request, category_id: Int) -> Response {
+  use user_id <- auth.require_auth(req)
+
+  use _ <- errors.try_response(service.delete_category(user_id, category_id))
+
+  wisp.no_content()
 }
 
 fn list_feed_categories(req: Request, feed_id: Int) -> Response {

@@ -13,6 +13,15 @@ pub fn create_category(user_id: Int, name: String) -> DAOResult(Nil) {
   base_dao.run_nil_query(fn(conn) { sql.create_category(conn, user_id, name) })
 }
 
+pub fn delete_category_by_user_and_id(
+  user_id: Int,
+  category_id: Int,
+) -> DAOResult(Nil) {
+  base_dao.run_nil_query(fn(conn) {
+    sql.delete_category_by_user_and_id(conn, user_id, category_id)
+  })
+}
+
 pub fn list_categories_by_feed_id(feed_id: Int) -> DAOResult(List(Category)) {
   base_dao.run_list_query(
     fn(conn) { sql.list_category_by_feed(conn, feed_id) },

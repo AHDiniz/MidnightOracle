@@ -1,7 +1,7 @@
 info:
   name: Category/Feed - Create
   type: http
-  seq: 15
+  seq: 16
 
 http:
   method: POST
@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "category_id": 2
+        "category_id": 3
       }
   auth: inherit
 

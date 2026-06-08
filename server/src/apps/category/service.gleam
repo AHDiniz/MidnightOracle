@@ -13,6 +13,11 @@ pub fn create_category(user_id: Int, name: String) -> ServerResult(Nil) {
   |> errors.to_internal_error()
 }
 
+pub fn delete_category(user_id: Int, category_id: Int) -> ServerResult(Nil) {
+  category_dao.delete_category_by_user_and_id(user_id, category_id)
+  |> errors.to_internal_error()
+}
+
 pub fn list_categories_by_feed(
   user_id: Int,
   feed_id: Int,
