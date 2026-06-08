@@ -1,5 +1,6 @@
 import apps/feed/xml/feed as xml_feed
 import apps/utils/errors.{type ServerResult}
+import dao/rss_feed as feed_dao
 import gleam/http
 import gleam/http/request
 import gleam/httpc
@@ -18,4 +19,15 @@ pub fn get_rss_fields_from_url(
   use res <- result.try(get_request(rss_url))
 
   xml_feed.get_feed_fields(res.body) |> errors.to_bad_request()
+}
+
+pub fn require_user_owns_feed(
+  user_id: Int,
+  feed_id: Int,
+  next: fn() -> ServerResult(a),
+) -> ServerResult(a) {
+  case feed_dao.check_user_owns_feed(user_id, feed_id) {
+    Ok(True) -> next()
+    _ -> Error(Nil) |> errors.to_internal_error()
+  }
 }

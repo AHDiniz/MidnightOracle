@@ -91,5 +91,8 @@ pub fn delete_rss_feed_by_id(rss_feed_id: Int, user_id: Int) -> DAOResult(Nil) {
 }
 
 pub fn check_user_owns_feed(user_id: Int, feed_id: Int) -> DAOResult(Bool) {
-  todo
+  base_dao.run_check_query(
+    fn(conn) { sql.check_user_owns_feed(conn, user_id, feed_id) },
+    fn(x) { x.exists },
+  )
 }

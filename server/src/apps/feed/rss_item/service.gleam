@@ -1,4 +1,3 @@
-import apps/feed/service as feed_service
 import apps/feed/utils
 import apps/feed/xml/item as xml
 import apps/utils/errors.{type ServerResult}
@@ -17,6 +16,9 @@ pub fn list_feed_saved_items(
   user_id: Int,
   feed_id: Int,
 ) -> ServerResult(List(RssItem)) {
+  // Checar se o usuário é dono do feed
+  use <- utils.require_user_owns_feed(user_id, feed_id)
+
   item_dao.list_rss_items_by_user_and_feed(user_id, feed_id)
   |> errors.to_internal_error()
 }
@@ -30,7 +32,7 @@ pub fn save_feed_item(
   enclosure_url: String,
 ) -> ServerResult(Nil) {
   // Checar se o usuário é dono do feed
-  use _ <- result.try(feed_service.get_feed_url(user_id, feed_id))
+  use <- utils.require_user_owns_feed(user_id, feed_id)
 
   item_dao.create_rss_item(feed_id, title, link, description, enclosure_url)
   |> errors.to_internal_error()
@@ -42,7 +44,7 @@ pub fn delete_saved_item(
   item_id: Int,
 ) -> ServerResult(Nil) {
   // Checar se o usuário é dono do feed
-  use _ <- result.try(feed_service.get_feed_url(user_id, feed_id))
+  use <- utils.require_user_owns_feed(user_id, feed_id)
 
   item_dao.delete_rss_item_by_id_and_feed_id(item_id, feed_id)
   |> errors.to_internal_error()

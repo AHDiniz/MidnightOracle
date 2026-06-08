@@ -23,6 +23,13 @@ type PogResult(a) =
 type QueryFn(a) =
   fn(pog.Connection) -> PogResult(a)
 
+pub fn run_get_query(
+  query_fn: QueryFn(row_type),
+  constructor: fn(row_type) -> domain_type,
+) -> DAOResult(Option(domain_type)) {
+  get_pog_connection() |> query_fn() |> handle_get_result(constructor)
+}
+
 fn handle_get_result(
   result: PogResult(row_type),
   constructor: fn(row_type) -> domain_type,
@@ -31,21 +38,7 @@ fn handle_get_result(
     Ok([]) -> Ok(option.None)
     Ok([row]) -> Ok(option.Some(constructor(row)))
     Ok(_) -> Error(MultipleGetError)
-    Error(x) -> Error(PogError(x))
-  }
-}
-
-pub fn run_get_query(
-  query_fn: QueryFn(row_type),
-  constructor: fn(row_type) -> domain_type,
-) -> DAOResult(Option(domain_type)) {
-  get_pog_connection() |> query_fn() |> handle_get_result(constructor)
-}
-
-fn handle_nil_result(result: PogResult(Nil)) -> DAOResult(Nil) {
-  case result {
-    Ok(_) -> Ok(Nil)
-    Error(x) -> Error(PogError(x))
+    Error(err) -> Error(PogError(err))
   }
 }
 
@@ -53,13 +46,10 @@ pub fn run_nil_query(query_fn: QueryFn(_)) -> DAOResult(Nil) {
   get_pog_connection() |> query_fn() |> handle_nil_result()
 }
 
-fn handle_list_result(
-  result: PogResult(row_type),
-  constructor: fn(row_type) -> domain_type,
-) -> DAOResult(List(domain_type)) {
+fn handle_nil_result(result: PogResult(Nil)) -> DAOResult(Nil) {
   case result {
-    Ok(ret) -> Ok(ret.rows |> list.map(constructor))
-    Error(x) -> Error(PogError(x))
+    Ok(_) -> Ok(Nil)
+    Error(err) -> Error(PogError(err))
   }
 }
 
@@ -68,6 +58,38 @@ pub fn run_list_query(
   constructor: fn(row_type) -> domain_type,
 ) -> DAOResult(List(domain_type)) {
   get_pog_connection() |> query_fn() |> handle_list_result(constructor)
+}
+
+fn handle_list_result(
+  result: PogResult(row_type),
+  constructor: fn(row_type) -> domain_type,
+) -> DAOResult(List(domain_type)) {
+  case result {
+    Ok(ret) -> Ok(ret.rows |> list.map(constructor))
+    Error(err) -> Error(PogError(err))
+  }
+}
+
+pub fn run_check_query(
+  query_fn: QueryFn(row_type),
+  constructor: fn(row_type) -> Bool,
+) {
+  get_pog_connection() |> query_fn() |> handle_check_result(constructor)
+}
+
+fn handle_check_result(
+  result: PogResult(row_type),
+  constructor: fn(row_type) -> Bool,
+) -> DAOResult(Bool) {
+  case result {
+    Ok(x) -> {
+      case x.rows {
+        [x] -> Ok(constructor(x))
+        _ -> Ok(False)
+      }
+    }
+    Error(err) -> Error(PogError(err))
+  }
 }
 
 fn get_pog_connection() -> pog.Connection {
