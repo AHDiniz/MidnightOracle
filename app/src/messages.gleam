@@ -1,4 +1,6 @@
 import gleam/http/response
+import midnight_domain/rss_feed
+import midnight_domain/rss_item
 import midnight_domain/user
 import rsvp
 
@@ -23,6 +25,19 @@ pub type Message {
   ApiRegisterRequest(
     result: Result(response.Response(String), rsvp.Error(String)),
   )
+  // Feed Messages
+  CreateFeedRequest(
+    result: Result(response.Response(String), rsvp.Error(String)),
+  )
+  ListFeedRequest(result: Result(List(rss_feed.RssFeed), rsvp.Error(String)))
+  // Item Messages
+  ListLiveItemRequest(
+    result: Result(List(#(String, String, String, String)), rsvp.Error(String)),
+  )
+  ListSavedItemRequest(
+    result: Result(List(rss_item.RssItem), rsvp.Error(String)),
+  )
+  SaveItemRequest(result: Result(response.Response(String), rsvp.Error(String)))
 }
 
 pub fn error_dispatch(dispatch) {
