@@ -34,3 +34,12 @@ pub fn add_category_to_feed(category_id: Int, feed_id: Int) -> DAOResult(Nil) {
     sql.add_category_to_feed(conn, category_id, feed_id)
   })
 }
+
+pub fn remove_category_from_feed(
+  category_id: Int,
+  feed_id: Int,
+) -> DAOResult(Nil) {
+  base_dao.run_nil_query(fn(conn) {
+    sql.remove_category_from_feed(conn, category_id, feed_id)
+  })
+}

@@ -1,4 +1,5 @@
 import apps/auth
+import apps/category/feed_category
 import apps/category/service
 import apps/utils
 import apps/utils/errors
@@ -27,17 +28,7 @@ pub fn router(req: Request, path: List(String)) -> Response {
         _ -> wisp.not_found()
       }
     }
-    ["feed", id] -> {
-      case int.parse(id) {
-        Ok(feed_id) ->
-          case req.method {
-            http.Get -> list_feed_categories(req, feed_id)
-            http.Post -> add_category_to_feed(req, feed_id)
-            _ -> wisp.method_not_allowed([http.Get, http.Post])
-          }
-        Error(_) -> wisp.not_found()
-      }
-    }
+    ["feed", ..path] -> feed_category.router(req, path)
     _ -> wisp.not_found()
   }
 }
@@ -72,36 +63,4 @@ fn delete_category(req: Request, category_id: Int) -> Response {
   use _ <- errors.try_response(service.delete_category(user_id, category_id))
 
   wisp.no_content()
-}
-
-fn list_feed_categories(req: Request, feed_id: Int) -> Response {
-  use user_id <- auth.require_auth(req)
-
-  use categories <- errors.try_response(service.list_categories_by_feed(
-    user_id,
-    feed_id,
-  ))
-
-  categories
-  |> json.array(category.to_json)
-  |> utils.fast_to_string
-  |> wisp.json_response(200)
-}
-
-fn add_category_to_feed(req: Request, feed_id: Int) -> Response {
-  use user_id <- auth.require_auth(req)
-
-  let decoder = {
-    use id <- decode.field("category_id", decode.int)
-    decode.success(id)
-  }
-  use category_id <- utils.decode_json_body(req, decoder)
-
-  use _ <- errors.try_response(service.add_category_to_feed(
-    user_id,
-    category_id,
-    feed_id,
-  ))
-
-  wisp.json_response("{}", 201)
 }

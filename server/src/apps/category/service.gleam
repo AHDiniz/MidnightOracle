@@ -40,3 +40,15 @@ pub fn add_category_to_feed(
   category_dao.add_category_to_feed(category_id, feed_id)
   |> errors.to_internal_error()
 }
+
+pub fn remove_category_from_feed(
+  user_id: Int,
+  category_id: Int,
+  feed_id: Int,
+) -> ServerResult(Nil) {
+  // Checar se o usuário é dono do feed
+  use <- utils.require_user_owns_feed(user_id, feed_id)
+
+  category_dao.remove_category_from_feed(category_id, feed_id)
+  |> errors.to_internal_error()
+}
