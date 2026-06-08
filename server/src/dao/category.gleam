@@ -43,3 +43,25 @@ pub fn remove_category_from_feed(
     sql.remove_category_from_feed(conn, category_id, feed_id)
   })
 }
+
+pub fn list_categories_by_item_id(item_id: Int) -> DAOResult(List(Category)) {
+  base_dao.run_list_query(
+    fn(conn) { sql.list_category_by_item(conn, item_id) },
+    fn(row) { category.Category(row.id, row.name) },
+  )
+}
+
+pub fn add_category_to_item(category_id: Int, item_id: Int) -> DAOResult(Nil) {
+  base_dao.run_nil_query(fn(conn) {
+    sql.add_category_to_item(conn, category_id, item_id)
+  })
+}
+
+pub fn remove_category_from_item(
+  category_id: Int,
+  item_id: Int,
+) -> DAOResult(Nil) {
+  base_dao.run_nil_query(fn(conn) {
+    sql.remove_category_from_item(conn, category_id, item_id)
+  })
+}

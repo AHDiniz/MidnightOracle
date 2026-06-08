@@ -1,5 +1,6 @@
 import apps/auth
 import apps/category/feed_category
+import apps/category/item_category
 import apps/category/service
 import apps/utils
 import apps/utils/errors
@@ -29,6 +30,7 @@ pub fn router(req: Request, path: List(String)) -> Response {
       }
     }
     ["feed", ..path] -> feed_category.router(req, path)
+    ["item", ..path] -> item_category.router(req, path)
     _ -> wisp.not_found()
   }
 }

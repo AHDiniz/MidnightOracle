@@ -52,3 +52,38 @@ pub fn remove_category_from_feed(
   category_dao.remove_category_from_feed(category_id, feed_id)
   |> errors.to_internal_error()
 }
+
+pub fn list_categories_by_item(
+  user_id: Int,
+  item_id: Int,
+) -> ServerResult(List(Category)) {
+  // Checar se o usuário é dono do item
+  use <- utils.require_user_owns_item(user_id, item_id)
+
+  category_dao.list_categories_by_item_id(item_id)
+  |> errors.to_internal_error()
+}
+
+pub fn add_category_to_item(
+  user_id: Int,
+  category_id: Int,
+  item_id: Int,
+) -> ServerResult(Nil) {
+  // Checar se o usuário é dono do item
+  use <- utils.require_user_owns_item(user_id, item_id)
+
+  category_dao.add_category_to_item(category_id, item_id)
+  |> errors.to_internal_error()
+}
+
+pub fn remove_category_from_item(
+  user_id: Int,
+  category_id: Int,
+  item_id: Int,
+) -> ServerResult(Nil) {
+  // Checar se o usuário é dono do item
+  use <- utils.require_user_owns_item(user_id, item_id)
+
+  category_dao.remove_category_from_item(category_id, item_id)
+  |> errors.to_internal_error()
+}
