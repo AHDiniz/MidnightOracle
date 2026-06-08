@@ -7,6 +7,47 @@
 import gleam/dynamic/decode
 import pog
 
+/// A row you get from running the `check_user_owns_item` query
+/// defined in `./src/dao/rss_item/sql/check_user_owns_item.sql`.
+///
+/// > 🐿️ This type definition was generated automatically using v4.7.0 of the
+/// > [squirrel package](https://github.com/giacomocavalieri/squirrel).
+///
+pub type CheckUserOwnsItemRow {
+  CheckUserOwnsItemRow(exists: Bool)
+}
+
+/// Runs the `check_user_owns_item` query
+/// defined in `./src/dao/rss_item/sql/check_user_owns_item.sql`.
+///
+/// > 🐿️ This function was generated automatically using v4.7.0 of
+/// > the [squirrel package](https://github.com/giacomocavalieri/squirrel).
+///
+pub fn check_user_owns_item(
+  db: pog.Connection,
+  rss_feed_user_id: Int,
+  rss_item_id: Int,
+) -> Result(pog.Returned(CheckUserOwnsItemRow), pog.QueryError) {
+  let decoder = {
+    use exists <- decode.field(0, decode.bool)
+    decode.success(CheckUserOwnsItemRow(exists:))
+  }
+
+  "SELECT EXISTS (
+  SELECT 1
+  FROM rss_item
+  INNER JOIN rss_feed
+    ON rss_item.feed_id = rss_feed.id
+  WHERE rss_feed.user_id = $1 AND rss_item.id = $2
+)
+"
+  |> pog.query
+  |> pog.parameter(pog.int(rss_feed_user_id))
+  |> pog.parameter(pog.int(rss_item_id))
+  |> pog.returning(decoder)
+  |> pog.execute(db)
+}
+
 /// Runs the `create_item` query
 /// defined in `./src/dao/rss_item/sql/create_item.sql`.
 ///

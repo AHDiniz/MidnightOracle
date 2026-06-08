@@ -41,3 +41,10 @@ pub fn delete_rss_item_by_id_and_feed_id(
     sql.delete_item_by_id_and_feed(conn, id, feed_id)
   })
 }
+
+pub fn check_user_owns_item(user_id: Int, item_id: Int) -> DAOResult(Bool) {
+  base_dao.run_check_query(
+    fn(conn) { sql.check_user_owns_item(conn, user_id, item_id) },
+    fn(row) { row.exists },
+  )
+}
