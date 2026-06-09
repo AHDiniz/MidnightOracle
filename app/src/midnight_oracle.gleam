@@ -20,6 +20,14 @@ fn update(
   let #(next_model, e) = case message {
     msg.ApiLoginRequest(result) -> ctrl.treat_login_message(model, result)
     msg.ApiRegisterRequest(result) -> ctrl.treat_register_message(model, result)
+    msg.CreateFeedRequest(result) ->
+      ctrl.treat_create_feed_message(model, result)
+    msg.ListFeedRequest(result) -> ctrl.treat_list_feed_message(model, result)
+    msg.ListLiveItemRequest(result) ->
+      ctrl.treat_list_live_items_message(model, result)
+    msg.ListSavedItemRequest(result) ->
+      ctrl.treat_list_saved_items_message(model, result)
+    msg.SaveItemRequest(result) -> ctrl.treat_save_item_message(model, result)
     msg.GoToPage(page) -> ctrl.treat_go_to_page_message(model, page)
     _ -> ctrl.update_pages(model, message)
   }
@@ -45,7 +53,7 @@ fn view(model: msg.Model) -> element.Element(msg.Message) {
 pub fn main() {
   let app = lustre.application(init, update, view)
   let user = user.User(username: "", email: "", password: "")
-  let model = msg.Model(user, "", msg.Login)
+  let model = msg.Model(user, "", msg.Login, [])
   let assert Ok(_) = lustre.start(app, "#app", model)
 
   Nil

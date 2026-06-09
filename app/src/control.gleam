@@ -4,6 +4,7 @@ import gleam/http/response
 import lustre/effect
 import messages as msg
 import midnight_domain/rss_feed as feed
+import midnight_domain/rss_item as item
 import midnight_domain/user
 import rsvp
 
@@ -30,7 +31,8 @@ pub fn login_update(
           email: model.user.email,
           password: model.user.password,
         )
-      let next_model = msg.Model(next_user, "", model.current_page)
+      let next_model =
+        msg.Model(next_user, "", model.current_page, model.feed_list)
       #(next_model, effect.none())
     }
     msg.SetPassword(password) -> {
@@ -40,7 +42,8 @@ pub fn login_update(
           email: model.user.email,
           password: password,
         )
-      let next_model = msg.Model(next_user, "", model.current_page)
+      let next_model =
+        msg.Model(next_user, "", model.current_page, model.feed_list)
       #(next_model, effect.none())
     }
     msg.UserLogin -> {
@@ -64,7 +67,8 @@ pub fn register_update(
           email: model.user.email,
           password: model.user.password,
         )
-      let next_model = msg.Model(next_user, "", model.current_page)
+      let next_model =
+        msg.Model(next_user, "", model.current_page, model.feed_list)
       #(next_model, effect.none())
     }
     msg.SetUserEmail(email) -> {
@@ -74,7 +78,8 @@ pub fn register_update(
           email: email,
           password: model.user.password,
         )
-      let next_model = msg.Model(next_user, "", model.current_page)
+      let next_model =
+        msg.Model(next_user, "", model.current_page, model.feed_list)
       #(next_model, effect.none())
     }
     msg.SetPassword(password) -> {
@@ -84,7 +89,8 @@ pub fn register_update(
           email: model.user.email,
           password: password,
         )
-      let next_model = msg.Model(next_user, "", model.current_page)
+      let next_model =
+        msg.Model(next_user, "", model.current_page, model.feed_list)
       #(next_model, effect.none())
     }
     msg.UserRegister -> {
@@ -124,7 +130,8 @@ pub fn treat_login_message(
 ) -> #(msg.Model, effect.Effect(msg.Message)) {
   case result {
     Ok(token) -> {
-      let next_model = msg.Model(model.user, token, model.current_page)
+      let next_model =
+        msg.Model(model.user, token, model.current_page, model.feed_list)
       #(next_model, effect.from(msg.simple_page_dispatcher(msg.Index)))
     }
     Error(_) -> {
@@ -153,7 +160,65 @@ pub fn treat_list_feed_message(
 ) -> #(msg.Model, effect.Effect(msg.Message)) {
   case result {
     Ok(feed_list) -> {
-      #(model, effect.from(msg.simple_page_dispatcher(msg.Feed)))
+      let next_model =
+        msg.Model(model.user, model.token, model.current_page, feed_list)
+      #(next_model, effect.from(msg.simple_page_dispatcher(msg.Feed)))
+    }
+    Error(_) -> {
+      #(model, effect.none())
+    }
+  }
+}
+
+pub fn treat_create_feed_message(
+  model: msg.Model,
+  result: Result(response.Response(String), rsvp.Error(String)),
+) -> #(msg.Model, effect.Effect(msg.Message)) {
+  case result {
+    Ok(_) -> {
+      #(model, effect.none())
+    }
+    Error(_) -> {
+      #(model, effect.none())
+    }
+  }
+}
+
+pub fn treat_list_live_items_message(
+  model: msg.Model,
+  result: Result(List(#(String, String, String, String)), rsvp.Error(String)),
+) -> #(msg.Model, effect.Effect(msg.Message)) {
+  case result {
+    Ok(_) -> {
+      #(model, effect.none())
+    }
+    Error(_) -> {
+      #(model, effect.none())
+    }
+  }
+}
+
+pub fn treat_list_saved_items_message(
+  model: msg.Model,
+  result: Result(List(item.RssItem), rsvp.Error(String)),
+) -> #(msg.Model, effect.Effect(msg.Message)) {
+  case result {
+    Ok(_) -> {
+      #(model, effect.none())
+    }
+    Error(_) -> {
+      #(model, effect.none())
+    }
+  }
+}
+
+pub fn treat_save_item_message(
+  model: msg.Model,
+  result: Result(response.Response(String), rsvp.Error(String)),
+) -> #(msg.Model, effect.Effect(msg.Message)) {
+  case result {
+    Ok(_) -> {
+      #(model, effect.none())
     }
     Error(_) -> {
       #(model, effect.none())
@@ -165,7 +230,7 @@ pub fn treat_go_to_page_message(
   model: msg.Model,
   page: msg.Page,
 ) -> #(msg.Model, effect.Effect(msg.Message)) {
-  let next_model = msg.Model(model.user, model.token, page)
+  let next_model = msg.Model(model.user, model.token, page, model.feed_list)
   #(next_model, effect.none())
 }
 

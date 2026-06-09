@@ -14,7 +14,12 @@ pub type Page {
 }
 
 pub type Model {
-  Model(user: user.User, token: String, current_page: Page)
+  Model(
+    user: user.User,
+    token: String,
+    current_page: Page,
+    feed_list: List(rss_feed.RssFeed),
+  )
 }
 
 pub type Message {
