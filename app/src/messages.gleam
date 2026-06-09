@@ -5,9 +5,12 @@ import midnight_domain/user
 import rsvp
 
 pub type Page {
+  Index
   Login
   Register
   Error
+  Feed
+  Item
 }
 
 pub type Model {
@@ -42,4 +45,8 @@ pub type Message {
 
 pub fn error_dispatch(dispatch) {
   dispatch(GoToPage(Error))
+}
+
+pub fn simple_page_dispatcher(page: Page) {
+  fn(dispatch) { dispatch(GoToPage(page)) }
 }

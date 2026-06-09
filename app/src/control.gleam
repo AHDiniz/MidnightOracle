@@ -3,8 +3,20 @@ import gleam/dynamic/decode
 import gleam/http/response
 import lustre/effect
 import messages as msg
+import midnight_domain/rss_feed as feed
 import midnight_domain/user
 import rsvp
+
+pub fn index_update(
+  model: msg.Model,
+  message: msg.Message,
+) -> #(msg.Model, effect.Effect(msg.Message)) {
+  case message {
+    _ -> {
+      #(model, effect.none())
+    }
+  }
+}
 
 pub fn login_update(
   model: msg.Model,
@@ -84,13 +96,36 @@ pub fn register_update(
   }
 }
 
+pub fn feed_update(
+  model: msg.Model,
+  message: msg.Message,
+) -> #(msg.Model, effect.Effect(msg.Message)) {
+  case message {
+    _ -> {
+      #(model, effect.none())
+    }
+  }
+}
+
+pub fn item_update(
+  model: msg.Model,
+  message: msg.Message,
+) -> #(msg.Model, effect.Effect(msg.Message)) {
+  case message {
+    _ -> {
+      #(model, effect.none())
+    }
+  }
+}
+
 pub fn treat_login_message(
   model: msg.Model,
   result: Result(String, rsvp.Error(String)),
 ) -> #(msg.Model, effect.Effect(msg.Message)) {
   case result {
-    Ok(_) -> {
-      #(model, effect.none())
+    Ok(token) -> {
+      let next_model = msg.Model(model.user, token, model.current_page)
+      #(next_model, effect.from(msg.simple_page_dispatcher(msg.Index)))
     }
     Error(_) -> {
       #(model, effect.from(msg.error_dispatch))
@@ -104,10 +139,24 @@ pub fn treat_register_message(
 ) -> #(msg.Model, effect.Effect(msg.Message)) {
   case result {
     Ok(_) -> {
-      #(model, effect.none())
+      #(model, effect.from(msg.simple_page_dispatcher(msg.Login)))
     }
     Error(_) -> {
       #(model, effect.from(msg.error_dispatch))
+    }
+  }
+}
+
+pub fn treat_list_feed_message(
+  model: msg.Model,
+  result: Result(List(feed.RssFeed), rsvp.Error(String)),
+) -> #(msg.Model, effect.Effect(msg.Message)) {
+  case result {
+    Ok(feed_list) -> {
+      #(model, effect.none())
+    }
+    Error(_) -> {
+      #(model, effect.none())
     }
   }
 }
@@ -120,10 +169,14 @@ pub fn treat_go_to_page_message(
   #(next_model, effect.none())
 }
 
-pub fn update_pages(model: msg.Model, message: msg.Message) -> #(msg.Model, effect.Effect(msg.Message)) {
+pub fn update_pages(
+  model: msg.Model,
+  message: msg.Message,
+) -> #(msg.Model, effect.Effect(msg.Message)) {
   case model.current_page {
     msg.Login -> login_update(model, message)
     msg.Register -> register_update(model, message)
     msg.Error -> #(model, effect.none())
+    _ -> #(model, effect.none())
   }
 }
