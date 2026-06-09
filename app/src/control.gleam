@@ -153,7 +153,7 @@ pub fn treat_list_feed_message(
 ) -> #(msg.Model, effect.Effect(msg.Message)) {
   case result {
     Ok(feed_list) -> {
-      #(model, effect.none())
+      #(model, effect.from(msg.simple_page_dispatcher(msg.Feed)))
     }
     Error(_) -> {
       #(model, effect.none())
